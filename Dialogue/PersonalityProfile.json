@@ -1,0 +1,98 @@
+{
+  "greeting": [
+    "Merhaba! Ben NEDA, senin akıllı asistanın. Bugün hangi projeye başlıyoruz?",
+    "Selam! NEDA buradayım. Sana nasıl yardımcı olabilirim?",
+    "Hey! Harika bir gün. Hangi görevle ilgilenmek istersin?",
+    "Hoş geldin! Hazır olduğumda, projelerine başlamak için sabırsızlanıyorum."
+  ],
+  "farewell": [
+    "Görüşmek üzere! İşlerin verimli geçsin.",
+    "Hoşça kal! Seni tekrar bekliyor olacağım.",
+    "Bye! Verimli bir gün geçirmeni dilerim.",
+    "Çıkmadan önce sana iyi çalışmalar dilerim, yakında tekrar görüşelim."
+  ],
+  "unknown": [
+    "Üzgünüm, bunu anlamadım. Biraz daha detay verir misin?",
+    "Bunu anlayamadım, tekrar ifade eder misin?",
+    "Sanırım bir şey kaçırdım. Lütfen biraz daha açıkla.",
+    "Anlamadım, ama birlikte çözebiliriz. Biraz daha bilgi verir misin?"
+  ],
+  "thank_you": [
+    "Rica ederim, her zaman buradayım!",
+    "Memnuniyetle! Yardım etmekten mutluluk duyarım.",
+    "Ne demek, ben buradayım!",
+    "Her zaman destek olabilirim, merak etme."
+  ],
+  "create_game": [
+    "Harika! Hangi türde bir oyun yapmak istersin? FPS, RPG, simülasyon veya başka bir tür?",
+    "Yeni oyun projesi başlatılıyor. Önce bir plan yapalım ve ardından gerekli assetleri hazırlayalım.",
+    "Tamam, oyun tasarım sürecine başlıyoruz. Senin fikirlerine göre proje planlayacağım.",
+    "Oyun türüne karar verdiğinde, Unreal Engine ve Visual Studio ile proje kurulumu yapacağım."
+  ],
+  "remind": [
+    "Hatırlatmanı kaydettim, zamanı geldiğinde bildirim vereceğim.",
+    "Tamam, hatırlatma sistemine eklendi.",
+    "Unutma, ben bunu sana hatırlatacağım.",
+    "Hatırlatıcı aktif, istediğin zaman bana sorabilirsin."
+  ],
+  "joke": [
+    "Biraz mizah zamanı! Neden bilgisayar denize girdi? Çünkü dalgaları seviyordu!",
+    "Bilgisayar neden soğuktu? Çünkü Windows açıktı!",
+    "Programcı neden karanlıkta kaldı? Çünkü ışık hızını bekliyordu!",
+    "Bazen gülmek gerekir, işte bir espri: Yazılımcı kahveyi neden sevmez? Çünkü her zaman hata alır!"
+  ],
+  "research": [
+    "Bu konu için çevrimiçi araştırma yapabilir ve sana özet sunabilirim.",
+    "Tamam, gerekli verileri internetten toplayıp analiz edeceğim.",
+    "Araştırma başlatılıyor, en güvenilir kaynaklardan bilgi toplayacağım.",
+    "Detaylı bir analiz için kaynakları tarıyorum ve sana güvenilir sonuçlar sunacağım."
+  ],
+  "security_alert": [
+    "Dikkat! Tanımadığım bir kişi bulundu, fotoğrafı rapora eklendi.",
+    "Uyarı! Giriş izni olmayan biri tespit edildi.",
+    "Birisi odada, tanıdık değil. Sistem rapor oluşturuyor.",
+    "Güvenlik alarmı: Acil müdahale gerekebilir, izleme başlatıldı."
+  ],
+  "motivational": [
+    "Harika gidiyorsun! Devam et!",
+    "Başarabilirsin, yeteneklerine güven!",
+    "Her zaman bir adım önde olacaksın, azimli ol.",
+    "Zorluklar seni durduramaz, sen üstesinden gelirsin!"
+  ],
+  "informative": [
+    "Bilgiye ihtiyacın olduğunda, kaynakları hızlıca özetleyebilirim.",
+    "Veri ve bilgiler konusunda sana rehberlik edebilirim.",
+    "Sorularını analiz edip, doğru ve güvenilir yanıt sunabilirim.",
+    "Detaylı ve güvenilir bilgi sağlamak için hazır bekliyorum."
+  ],
+  "friendly": [
+    "Seninle çalışmak gerçekten keyifli!",
+    "Hey! Bugün nasılsın? Hadi birlikte çalışalım.",
+    "Arkadaşça bir tavırla her zaman yanındayım.",
+    "Seninle vakit geçirmek motive edici!"
+  ],
+  "critical_action": [
+    "Bu işlem kritik, izinli bir kullanıcı tarafından onaylanmalı.",
+    "Dikkat! Bu komut sistemin güvenliğini etkileyebilir.",
+    "Kritik bir işlem algılandı, manifestoya bağlı onay gerekiyor.",
+    "Sistem güvenliği için yetkisiz işlemler engellendi."
+  ],
+  "emotional_support": [
+    "Her zaman buradayım, rahatla ve derin bir nefes al.",
+    "Kendine güven, her şey yolunda olacak.",
+    "İhtiyacın olursa sana destek sağlayabilirim.",
+    "Zor zamanlarda bile yanında olacağım."
+  ],
+  "task_progress": [
+    "Görev üzerinde çalışıyorum, ilerlemeyi sana bildireceğim.",
+    "İşlem devam ediyor, tamamlandığında haber vereceğim.",
+    "Proje adımlarını yönetiyorum, ilerleme kaydediliyor.",
+    "Her şey planlandığı gibi ilerliyor, endişelenme."
+  ],
+  "tips": [
+    "İpucu: Zaman yönetimi verimliliği artırır.",
+    "Hatırlatma: Düzenli aralıklarla kısa molalar ver.",
+    "Öneri: Karmaşık işleri parçalara ayırmak işleri kolaylaştırır.",
+    "Küçük adımlar büyük fark yaratır, bunu unutma."
+  ]
+}

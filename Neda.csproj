@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<EnableDefaultPageItems>false</EnableDefaultPageItems>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<!-- Projeye dahil edilecek tüm C# dosyaları -->
+	<ItemGroup>
+		<Compile Include="**\*.cs" />
+	</ItemGroup>
+
+	<!-- Projeye dahil edilecek tüm XAML dosyaları -->
+	<ItemGroup>
+		<Page Include="**\*.xaml" />
+	</ItemGroup>
+
+	<!-- JSON, Assets ve diğer None dosyaları -->
+	<ItemGroup>
+		<None Include="KnowledgeBase\KnowledgeConfig.json" />
+		<Folder Include="NEDA.EngineIntegration\Controllers\" />
+		<Folder Include="UI\NEDAControlPanel\Assets\Prefabs\" />
+		<Folder Include="UI\NEDAControlPanel\Assets\Textures\" />
+		<Folder Include="UI\NEDAControlPanel\Assets\Icons\" />
+	</ItemGroup>
+
+	<!-- Paket Referansları -->
+	<ItemGroup>
+		<PackageReference Include="Beamable.UnityEngine.Addressables" Version="6.1.0" />
+		<PackageReference Include="directxtk12_desktop_win10" Version="2025.10.28.1" />
+		<PackageReference Include="directxtk_desktop_win10" Version="2025.10.28.2" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols" Version="8.14.0" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="2.0.2-experimental" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="Syncfusion.Presentation.Net.Core" Version="31.2.10" />
+		<PackageReference Include="System.Speech" Version="10.0.0" />
+	</ItemGroup>
+
+	<!-- WindowsBase ve WPF referansları -->
+	<ItemGroup>
+		<Reference Include="PresentationCore" />
+		<Reference Include="PresentationFramework" />
+		<Reference Include="WindowsBase" />
+		<Reference Include="System.Xaml" />
+		<Reference Include="System.Net.Http" />
+	</ItemGroup>
+
+</Project>
