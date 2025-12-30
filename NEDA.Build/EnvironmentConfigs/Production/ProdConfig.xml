@@ -1,0 +1,798 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =========================================================================== -->
+<!-- NEDA Production Configuration -->
+<!-- =========================================================================== -->
+<!-- Industrial-grade production configuration for NEDA (Neural Engine for Digital Automation) -->
+<!-- Version: 2.1.0 | Environment: Production | Last Updated: 2024-01-15 -->
+<!-- =========================================================================== -->
+
+<NEDAConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:noNamespaceSchemaLocation="https://schema.neda.io/config/v2.1.0"
+                  version="2.1.0"
+                  environment="Production"
+                  deploymentId="NEDA-PROD-2024-Q1">
+
+	<!-- ======================================================================= -->
+	<!-- System Configuration -->
+	<!-- ======================================================================= -->
+	<System>
+		<Identity>
+			<SystemId>NEDA-PRODUCTION-CLUSTER-01</SystemId>
+			<InstanceId>${MACHINE_NAME}-${INSTANCE_NUMBER:001}</InstanceId>
+			<DeploymentZone>us-west-2a</DeploymentZone>
+			<Tier>Platinum</Tier>
+			<ComplianceLevel>Enterprise</ComplianceLevel>
+		</Identity>
+
+		<Metadata>
+			<Version>2.1.0</Version>
+			<BuildNumber>${BUILD_NUMBER:2100}</BuildNumber>
+			<CommitHash>${GIT_COMMIT:abcdef123456}</CommitHash>
+			<BuildDate>2024-01-15T10:00:00Z</BuildDate>
+			<ReleaseChannel>Stable</ReleaseChannel>
+			<LicenseKey>${NEDA_LICENSE_KEY}</LicenseKey>
+		</Metadata>
+
+		<Features>
+			<Feature name="HighAvailability" enabled="true" priority="Critical"/>
+			<Feature name="DisasterRecovery" enabled="true" priority="Critical"/>
+			<Feature name="AutoScaling" enabled="true" priority="High"/>
+			<Feature name="LoadBalancing" enabled="true" priority="High"/>
+			<Feature name="HealthMonitoring" enabled="true" priority="Critical"/>
+			<Feature name="PerformanceMonitoring" enabled="true" priority="High"/>
+			<Feature name="SecurityMonitoring" enabled="true" priority="Critical"/>
+			<Feature name="BackupAutomation" enabled="true" priority="High"/>
+			<Feature name="AuditLogging" enabled="true" priority="Critical"/>
+			<Feature name="ComplianceReporting" enabled="true" priority="High"/>
+		</Features>
+	</System>
+
+	<!-- ======================================================================= -->
+	<!-- Infrastructure Configuration -->
+	<!-- ======================================================================= -->
+	<Infrastructure>
+		<Compute>
+			<Cluster>
+				<Name>neda-production-cluster</Name>
+				<Type>Kubernetes</Type>
+				<Version>1.27</Version>
+				<NodeCount min="3" max="10" desired="5"/>
+				<NodeTypes>
+					<NodeType id="general-purpose">
+						<InstanceType>m6i.2xlarge</InstanceType>
+						<vCPUs>8</vCPUs>
+						<Memory>32Gi</Memory>
+						<Storage>100Gi</Storage>
+						<Count min="3" max="6"/>
+					</NodeType>
+					<NodeType id="ai-accelerated">
+						<InstanceType>g5.2xlarge</InstanceType>
+						<vCPUs>8</vCPUs>
+						<Memory>32Gi</Memory>
+						<Storage>200Gi</Storage>
+						<GPUs count="1" type="NVIDIA A10G"/>
+						<Count min="2" max="4"/>
+					</NodeType>
+				</NodeTypes>
+			</Cluster>
+
+			<Resources>
+				<CPU>
+					<Request>1000m</Request>
+					<Limit>4000m</Limit>
+					<BurstLimit>8000m</BurstLimit>
+					<Reservation>500m</Reservation>
+				</CPU>
+				<Memory>
+					<Request>4Gi</Request>
+					<Limit>16Gi</Limit>
+					<Swap>2Gi</Swap>
+					<HugePages enabled="true" size="2Mi" count="512"/>
+				</Memory>
+				<Storage>
+					<Type>SSD</Type>
+					<PerformanceTier>Premium</PerformanceTier>
+					<IOPS min="3000" max="16000"/>
+					<Throughput min="125" max="1000" unit="MB/s"/>
+				</Storage>
+			</Resources>
+		</Compute>
+
+		<Networking>
+			<NetworkPolicy>
+				<CIDR>10.0.0.0/16</CIDR>
+				<Subnets>
+					<Subnet name="public" cidr="10.0.1.0/24" zone="us-west-2a"/>
+					<Subnet name="private" cidr="10.0.2.0/24" zone="us-west-2b"/>
+					<Subnet name="database" cidr="10.0.3.0/24" zone="us-west-2c"/>
+				</Subnets>
+			</NetworkPolicy>
+
+			<LoadBalancing>
+				<Type>Application</Type>
+				<Scheme>internet-facing</Scheme>
+				<Protocols>
+					<Protocol name="HTTP" port="80" redirectToHTTPS="true"/>
+					<Protocol name="HTTPS" port="443" certificateARN="${SSL_CERTIFICATE_ARN}"/>
+					<Protocol name="gRPC" port="50051" enableTLS="true"/>
+				</Protocols>
+				<HealthCheck path="/health" port="8080" interval="30" timeout="10" healthyThreshold="2" unhealthyThreshold="3"/>
+				<StickySessions enabled="true" duration="3600"/>
+				<CrossZoneLoadBalancing enabled="true"/>
+			</LoadBalancing>
+
+			<DNS>
+				<Domain>neda.production.company.com</Domain>
+				<Subdomains>
+					<Subdomain name="api" target="api.neda.production.company.com"/>
+					<Subdomain name="ui" target="app.neda.production.company.com"/>
+					<Subdomain name="monitoring" target="grafana.neda.production.company.com"/>
+					<Subdomain name="logs" target="kibana.neda.production.company.com"/>
+				</Subdomains>
+				<TTL>300</TTL>
+				<DNSSEC enabled="true"/>
+			</DNS>
+
+			<SecurityGroups>
+				<SecurityGroup name="neda-frontend">
+					<Ingress>
+						<Rule protocol="TCP" fromPort="80" toPort="80" cidr="0.0.0.0/0" description="HTTP Access"/>
+						<Rule protocol="TCP" fromPort="443" toPort="443" cidr="0.0.0.0/0" description="HTTPS Access"/>
+					</Ingress>
+				</SecurityGroup>
+				<SecurityGroup name="neda-backend">
+					<Ingress>
+						<Rule protocol="TCP" fromPort="8080" toPort="8080" sourceSG="neda-frontend" description="Internal API Access"/>
+						<Rule protocol="TCP" fromPort="50051" toPort="50051" sourceSG="neda-frontend" description="gRPC Access"/>
+					</Ingress>
+				</SecurityGroup>
+			</SecurityGroups>
+		</Networking>
+
+		<Storage>
+			<BlockStorage>
+				<Type>gp3</Type>
+				<Size>100Gi</Size>
+				<IOPS>3000</IOPS>
+				<Throughput>125</Throughput>
+				<Encryption enabled="true" kmsKeyId="${KMS_KEY_ID}"/>
+			</BlockStorage>
+
+			<ObjectStorage>
+				<Bucket name="neda-production-data">
+					<Region>us-west-2</Region>
+					<Versioning enabled="true"/>
+					<Encryption enabled="true" type="SSE-KMS" kmsKeyId="${KMS_KEY_ID}"/>
+					<Lifecycle>
+						<Rule>
+							<Prefix>temp/</Prefix>
+							<Expiration days="7"/>
+							<Status>Enabled</Status>
+						</Rule>
+						<Rule>
+							<Prefix>backups/</Prefix>
+							<Transition>
+								<StorageClass>STANDARD_IA</StorageClass>
+								<Days>30</Days>
+							</Transition>
+							<Expiration days="365"/>
+							<Status>Enabled</Status>
+						</Rule>
+					</Lifecycle>
+				</Bucket>
+			</ObjectStorage>
+
+			<DatabaseStorage>
+				<Type>io2</Type>
+				<Size>500Gi</Size>
+				<IOPS>10000</IOPS>
+				<Throughput>1000</Throughput>
+				<Provisioned>true</Provisioned>
+			</DatabaseStorage>
+		</Storage>
+	</Infrastructure>
+
+	<!-- ======================================================================= -->
+	<!-- Application Configuration -->
+	<!-- ======================================================================= -->
+	<Application>
+		<Core>
+			<Runtime>
+				<DotNet version="8.0" runtime="linux-x64"/>
+				<Python version="3.10" />
+				<NodeJS version="18" />
+			</Runtime>
+
+			<Scaling>
+				<Horizontal>
+					<Enabled>true</Enabled>
+					<MinReplicas>3</MinReplicas>
+					<MaxReplicas>10</MaxReplicas>
+					<TargetCPUUtilization>70</TargetCPUUtilization>
+					<TargetMemoryUtilization>80</TargetMemoryUtilization>
+					<CooldownPeriod>300</CooldownPeriod>
+				</Horizontal>
+				<Vertical>
+					<Enabled>true</Enabled>
+					<UpdateMode>Auto</UpdateMode>
+				</Vertical>
+			</Scaling>
+
+			<Deployment>
+				<Strategy>BlueGreen</Strategy>
+				<MaxUnavailable>25%</MaxUnavailable>
+				<MaxSurge>25%</MaxSurge>
+				<MinReadySeconds>30</MinReadySeconds>
+				<ProgressDeadlineSeconds>600</ProgressDeadlineSeconds>
+				<RevisionHistoryLimit>10</RevisionHistoryLimit>
+			</Deployment>
+
+			<HealthChecks>
+				<Liveness>
+					<Path>/health/live</Path>
+					<Port>8080</Port>
+					<InitialDelaySeconds>30</InitialDelaySeconds>
+					<PeriodSeconds>10</PeriodSeconds>
+					<TimeoutSeconds>5</TimeoutSeconds>
+					<SuccessThreshold>1</SuccessThreshold>
+					<FailureThreshold>3</FailureThreshold>
+				</Liveness>
+				<Readiness>
+					<Path>/health/ready</Path>
+					<Port>8080</Port>
+					<InitialDelaySeconds>5</InitialDelaySeconds>
+					<PeriodSeconds>5</PeriodSeconds>
+					<TimeoutSeconds>3</TimeoutSeconds>
+					<SuccessThreshold>1</SuccessThreshold>
+					<FailureThreshold>3</FailureThreshold>
+				</Readiness>
+				<Startup>
+					<Path>/health/startup</Path>
+					<Port>8080</Port>
+					<InitialDelaySeconds>0</InitialDelaySeconds>
+					<PeriodSeconds>5</PeriodSeconds>
+					<TimeoutSeconds>30</TimeoutSeconds>
+					<SuccessThreshold>1</SuccessThreshold>
+					<FailureThreshold>30</FailureThreshold>
+				</Startup>
+			</HealthChecks>
+		</Core>
+
+		<Services>
+			<Service name="api-gateway">
+				<Port>8080</Port>
+				<Protocol>HTTP/HTTPS</Protocol>
+				<Type>LoadBalancer</Type>
+				<Replicas min="2" max="5"/>
+				<Resources>
+					<CPU request="500m" limit="2000m"/>
+					<Memory request="1Gi" limit="4Gi"/>
+				</Resources>
+			</Service>
+
+			<Service name="ai-engine">
+				<Port>5000</Port>
+				<Protocol>HTTP/gRPC</Protocol>
+				<Type>ClusterIP</Type>
+				<Replicas min="3" max="8"/>
+				<Resources>
+					<CPU request="2000m" limit="8000m"/>
+					<Memory request="8Gi" limit="32Gi"/>
+					<GPU count="1" type="nvidia.com/gpu"/>
+				</Resources>
+				<NodeSelector>
+					<Label key="node-type" value="ai-accelerated"/>
+				</NodeSelector>
+			</Service>
+
+			<Service name="background-worker">
+				<Port>9090</Port>
+				<Protocol>HTTP</Protocol>
+				<Type>ClusterIP</Type>
+				<Replicas min="2" max="4"/>
+				<Resources>
+					<CPU request="1000m" limit="4000m"/>
+					<Memory request="2Gi" limit="8Gi"/>
+				</Resources>
+			</Service>
+		</Services>
+
+		<Databases>
+			<Database name="postgres-primary">
+				<Type>PostgreSQL</Type>
+				<Version>15</Version>
+				<Engine>Aurora</Engine>
+				<InstanceClass>db.r6g.2xlarge</InstanceClass>
+				<Storage>500</Storage>
+				<MultiAZ>true</MultiAZ>
+				<BackupRetention>35</BackupRetention>
+				<MaintenanceWindow>sun:03:00-sun:04:00</MaintenanceWindow>
+				<Parameters>
+					<Parameter name="max_connections" value="1000"/>
+					<Parameter name="shared_buffers" value="8GB"/>
+					<Parameter name="effective_cache_size" value="24GB"/>
+				</Parameters>
+			</Database>
+
+			<Database name="redis-cache">
+				<Type>Redis</Type>
+				<Version>7.0</Version>
+				<Engine>ElastiCache</Engine>
+				<NodeType>cache.r6g.xlarge</NodeType>
+				<NumNodes>3</NumNodes>
+				<MultiAZ>true</MultiAZ>
+				<AutomaticFailover>true</AutomaticFailover>
+			</Database>
+
+			<Database name="elasticsearch-logs">
+				<Type>Elasticsearch</Type>
+				<Version>7.10</Version>
+				<InstanceType>m6g.2xlarge.elasticsearch</InstanceType>
+				<InstanceCount>3</InstanceCount>
+				<Storage>1000</Storage>
+				<DedicatedMaster>true</DedicatedMaster>
+			</Database>
+		</Databases>
+
+		<MessageQueue>
+			<Broker name="rabbitmq">
+				<Type>RabbitMQ</Type>
+				<Version>3.11</Version>
+				<InstanceType>mq.m5.xlarge</InstanceType>
+				<DeploymentMode>CLUSTER_MULTI_AZ</DeploymentMode>
+				<Storage>200</Storage>
+				<AutoMinorVersionUpgrade>true</AutoMinorVersionUpgrade>
+			</Broker>
+
+			<Queues>
+				<Queue name="ai-processing" durable="true" autoDelete="false">
+					<RoutingKey>ai.tasks</RoutingKey>
+					<Arguments>
+						<Argument name="x-max-priority" value="10"/>
+						<Argument name="x-message-ttl" value="86400000"/>
+					</Arguments>
+				</Queue>
+				<Queue name="background-jobs" durable="true" autoDelete="false">
+					<RoutingKey>jobs.*</RoutingKey>
+					<Arguments>
+						<Argument name="x-dead-letter-exchange" value="dlx"/>
+						<Argument name="x-dead-letter-routing-key" value="dlq"/>
+					</Arguments>
+				</Queue>
+			</Queues>
+		</MessageQueue>
+	</Application>
+
+	<!-- ======================================================================= -->
+	<!-- Security Configuration -->
+	<!-- ======================================================================= -->
+	<Security>
+		<Authentication>
+			<Method>JWT</Method>
+			<Provider>AzureAD</Provider>
+			<Token>
+				<SecretKey>${JWT_SECRET_KEY}</SecretKey>
+				<Issuer>https://neda.production.company.com</Issuer>
+				<Audience>neda-api-clients</Audience>
+				<Expiry>86400</Expiry>
+				<RefreshToken enabled="true" expiry="604800"/>
+			</Token>
+			<MultiFactor enabled="true" requiredForAdmin="true"/>
+			<Session>
+				<Timeout>3600</Timeout>
+				<Renewal enabled="true"/>
+				<ConcurrentSessions max="3"/>
+			</Session>
+		</Authentication>
+
+		<Authorization>
+			<RBAC enabled="true">
+				<Roles>
+					<Role name="SuperAdmin" level="1000">
+						<Permissions>*</Permissions>
+					</Role>
+					<Role name="Admin" level="900">
+						<Permissions>system.*,user.*,project.*</Permissions>
+					</Role>
+					<Role name="Developer" level="500">
+						<Permissions>project.read,project.write,api.*</Permissions>
+					</Role>
+					<Role name="Viewer" level="100">
+						<Permissions>project.read,api.read</Permissions>
+					</Role>
+				</Roles>
+			</RBAC>
+			<Policies>
+				<Policy name="DataAccessPolicy" effect="Allow">
+					<Actions>read,write,delete</Actions>
+					<Resources>projects/*,models/*</Resources>
+					<Conditions>
+						<Condition field="owner" operator="Equals" value="${user.id}"/>
+					</Conditions>
+				</Policy>
+			</Policies>
+		</Authorization>
+
+		<Encryption>
+			<AtRest>
+				<Algorithm>AES-256-GCM</Algorithm>
+				<KeyManagement>AWS KMS</KeyManagement>
+				<KeyID>${ENCRYPTION_KEY_ID}</KeyID>
+				<RotationPeriod>90</RotationPeriod>
+			</AtRest>
+			<InTransit>
+				<Protocol>TLS 1.3</Protocol>
+				<CipherSuites>TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256</CipherSuites>
+				<CertificateAuthority>Private CA</CertificateAuthority>
+				<CertificateRenewal automatic="true" daysBeforeExpiry="30"/>
+			</InTransit>
+		</Encryption>
+
+		<NetworkSecurity>
+			<Firewall>
+				<WebApplicationFirewall enabled="true" mode="Prevention">
+					<Ruleset>OWASP_3.2</Ruleset>
+					<ManagedRules>
+						<RuleGroup name="AWSManagedRulesCommonRuleSet" priority="1"/>
+						<RuleGroup name="AWSManagedRulesKnownBadInputsRuleSet" priority="2"/>
+						<RuleGroup name="AWSManagedRulesSQLiRuleSet" priority="3"/>
+					</ManagedRules>
+				</WebApplicationFirewall>
+				<NetworkACL>
+					<Rule action="Allow" protocol="TCP" port="443" cidr="0.0.0.0/0" description="HTTPS Access"/>
+					<Rule action="Allow" protocol="TCP" port="22" cidr="${COMPANY_IP_RANGE}" description="SSH Access"/>
+					<Rule action="Deny" protocol="ANY" port="ANY" cidr="0.0.0.0/0" description="Default Deny"/>
+				</NetworkACL>
+			</Firewall>
+
+			<DDoSProtection enabled="true" provider="AWS Shield Advanced"/>
+
+			<IntrusionDetection>
+				<Enabled>true</Enabled>
+				<System>AWS GuardDuty</System>
+				<AlertChannels>Slack,Email,PagerDuty</AlertChannels>
+			</IntrusionDetection>
+		</NetworkSecurity>
+
+		<Compliance>
+			<Standards>
+				<Standard name="HIPAA" enabled="true"/>
+				<Standard name="GDPR" enabled="true"/>
+				<Standard name="SOC2" enabled="true"/>
+				<Standard name="PCI-DSS" enabled="false"/>
+				<Standard name="ISO27001" enabled="true"/>
+			</Standards>
+
+			<Audit>
+				<Enabled>true</Enabled>
+				<Trail>
+					<Name>neda-production-audit-trail</Name>
+					<MultiRegion>true</MultiRegion>
+					<LogFileValidation enabled="true"/>
+					<Encryption enabled="true"/>
+					<DataEvents>
+						<Event source="Management" category="All"/>
+						<Event source="Data" category="All"/>
+					</DataEvents>
+				</Trail>
+				<Retention>
+					<AccessLogs>90</AccessLogs>
+					<AuditLogs>365</AuditLogs>
+					<SecurityLogs>180</SecurityLogs>
+				</Retention>
+			</Audit>
+		</Compliance>
+	</Security>
+
+	<!-- ======================================================================= -->
+	<!-- Monitoring & Observability -->
+	<!-- ======================================================================= -->
+	<Monitoring>
+		<Metrics>
+			<CollectionInterval>60</CollectionInterval>
+			<RetentionPeriod>93</RetentionPeriod>
+			<Namespaces>
+				<Namespace>AWS/EC2</Namespace>
+				<Namespace>AWS/RDS</Namespace>
+				<Namespace>AWS/ElastiCache</Namespace>
+				<Namespace>NEDA/Application</Namespace>
+			</Namespaces>
+
+			<Alarms>
+				<Alarm name="HighCPUUtilization" severity="Warning">
+					<Metric>CPUUtilization</Metric>
+					<Statistic>Average</Statistic>
+					<Period>300</Period>
+					<Threshold>80</Threshold>
+					<EvaluationPeriods>2</EvaluationPeriods>
+					<ComparisonOperator>GreaterThanThreshold</ComparisonOperator>
+					<Actions>
+						<Action type="AutoScaling" policy="ScaleOut"/>
+						<Action type="Notification" target="SNS:alarms"/>
+					</Actions>
+				</Alarm>
+				<Alarm name="DatabaseConnectionCount" severity="Critical">
+					<Metric>DatabaseConnections</Metric>
+					<Statistic>Maximum</Statistic>
+					<Period>60</Period>
+					<Threshold>800</Threshold>
+					<EvaluationPeriods>1</EvaluationPeriods>
+					<ComparisonOperator>GreaterThanThreshold</ComparisonOperator>
+					<Actions>
+						<Action type="Notification" target="PagerDuty:critical"/>
+					</Actions>
+				</Alarm>
+			</Alarms>
+		</Metrics>
+
+		<Logging>
+			<Centralized enabled="true">
+				<Destination>AWS CloudWatch Logs</Destination>
+				<Retention>365</Retention>
+				<Encryption enabled="true"/>
+			</Centralized>
+
+			<LogGroups>
+				<LogGroup name="/neda/application" retention="90"/>
+				<LogGroup name="/neda/security" retention="180"/>
+				<LogGroup name="/neda/audit" retention="365"/>
+				<LogGroup name="/neda/performance" retention="30"/>
+			</LogGroups>
+
+			<StructuredLogging enabled="true" format="JSON"/>
+
+			<RealTimeProcessing enabled="true">
+				<Stream>AWS Kinesis Data Streams</Stream>
+				<Analytics>AWS Kinesis Data Analytics</Analytics>
+			</RealTimeProcessing>
+		</Logging>
+
+		<Tracing>
+			<Enabled>true</Enabled>
+			<Provider>AWS X-Ray</Provider>
+			<SamplingRate>0.1</SamplingRate>
+			<Annotations>
+				<Annotation name="environment" value="production"/>
+				<Annotation name="service" value="neda"/>
+				<Annotation name="version" value="2.1.0"/>
+			</Annotations>
+		</Tracing>
+
+		<Dashboards>
+			<Dashboard name="NEDA-Production-Overview" provider="Grafana">
+				<DataSource>CloudWatch,Prometheus,X-Ray</DataSource>
+				<RefreshInterval>30</RefreshInterval>
+				<Panels>
+					<Panel type="TimeSeries" title="Request Rate" metric="RequestCount"/>
+					<Panel type="TimeSeries" title="Error Rate" metric="5xxErrorCount"/>
+					<Panel type="Gauge" title="CPU Utilization" metric="CPUUtilization"/>
+					<Panel type="Table" title="Top Endpoints" metric="Latency"/>
+				</Panels>
+			</Dashboard>
+		</Dashboards>
+
+		<Alerting>
+			<Channels>
+				<Channel type="Email" address="engineering-alerts@company.com"/>
+				<Channel type="Slack" webhook="${SLACK_WEBHOOK_URL}"/>
+				<Channel type="PagerDuty" serviceKey="${PAGERDUTY_SERVICE_KEY}"/>
+				<Channel type="SMS" phoneNumbers="${ON_CALL_NUMBERS}"/>
+			</Channels>
+
+			<Routing>
+				<Route name="Critical" conditions="severity=critical" channels="PagerDuty,SMS"/>
+				<Route name="Warning" conditions="severity=warning" channels="Slack,Email"/>
+				<Route name="Info" conditions="severity=info" channels="Slack"/>
+			</Routing>
+		</Alerting>
+	</Monitoring>
+
+	<!-- ======================================================================= -->
+	<!-- Backup & Disaster Recovery -->
+	<!-- ======================================================================= -->
+	<Backup>
+		<Strategy>
+			<Type>Automated</Type>
+			<Frequency>Daily</Frequency>
+			<Retention>
+				<Daily>30</Daily>
+				<Weekly>12</Weekly>
+				<Monthly>36</Monthly>
+				<Yearly>7</Yearly>
+			</Retention>
+			<Verification enabled="true" frequency="Weekly"/>
+		</Strategy>
+
+		<Targets>
+			<Target name="S3-Backups">
+				<Location>s3://neda-production-backups</Location>
+				<Region>us-west-2</Region>
+				<StorageClass>STANDARD_IA</StorageClass>
+				<Encryption enabled="true" type="SSE-KMS"/>
+			</Target>
+			<Target name="Cross-Region">
+				<Location>s3://neda-production-backups-dr</Location>
+				<Region>us-east-1</Region>
+				<Replication enabled="true" delay="900"/>
+			</Target>
+		</Targets>
+
+		<Databases>
+			<Database name="postgres">
+				<Snapshot enabled="true" frequency="Hourly"/>
+				<PointInTimeRecovery enabled="true" retention="35"/>
+				<Export enabled="true" format="SQL" schedule="0 2 * * *"/>
+			</Database>
+		</Databases>
+
+		<Applications>
+			<Application name="neda-core">
+				<VolumeSnapshots enabled="true" schedule="0 1 * * *"/>
+				<ConfigurationBackup enabled="true" schedule="0 0 * * *"/>
+			</Application>
+		</Applications>
+	</Backup>
+
+	<DisasterRecovery>
+		<Plan name="NEDA-DR-PLAN-01">
+			<RTO>4 hours</RTO>
+			<RPO>15 minutes</RPO>
+			<RecoveryPoint>Warm Standby</RecoveryPoint>
+		</Plan>
+
+		<Regions>
+			<Primary region="us-west-2" weight="100"/>
+			<Secondary region="us-east-1" weight="0"/>
+		</Regions>
+
+		<Failover>
+			<Automatic enabled="true" conditions="HealthCheckFailedFor15Minutes"/>
+			<Manual enabled="true" approvalRequired="true"/>
+			<Testing schedule="Quarterly" retention="2"/>
+		</Failover>
+
+		<Resources>
+			<Database replication="Asynchronous" lagLimit="300"/>
+			<Storage replication="Synchronous" />
+			<DNS failover="Active-Passive" ttl="60"/>
+		</Resources>
+	</DisasterRecovery>
+
+	<!-- ======================================================================= -->
+	<!-- Performance Optimization -->
+	<!-- ======================================================================= -->
+	<Performance>
+		<Caching>
+			<Layers>
+				<Layer name="CDN" provider="CloudFront" ttl="86400"/>
+				<Layer name="Application" provider="Redis" ttl="3600" maxMemory="8GB"/>
+				<Layer name="Database" provider="RDS" enabled="true"/>
+			</Layers>
+
+			<Strategies>
+				<Strategy type="WriteThrough" enabled="true"/>
+				<Strategy type="CacheAside" enabled="true"/>
+				<Strategy type="ReadThrough" enabled="false"/>
+			</Strategies>
+		</Caching>
+
+		<Database>
+			<ConnectionPooling enabled="true" maxSize="100" minSize="10"/>
+			<QueryOptimization enabled="true" analyzeFrequency="Daily"/>
+			<IndexManagement enabled="true" autoCreate="true" autoDrop="false"/>
+		</Database>
+
+		<Network>
+			<CDN enabled="true" provider="CloudFront" pointsOfPresence="Global"/>
+			<Compression enabled="true" algorithms="gzip,br" minSize="1024"/>
+			<KeepAlive enabled="true" timeout="65"/>
+		</Network>
+
+		<Application>
+			<ThreadPool minThreads="10" maxThreads="100"/>
+			<GarbageCollection type="G1" maxGCPauseMillis="200"/>
+			<ConnectionTimeout>30</ConnectionTimeout>
+			<RequestTimeout>30</RequestTimeout>
+		</Application>
+	</Performance>
+
+	<!-- ======================================================================= -->
+	<!-- Cost Optimization -->
+	<!-- ======================================================================= -->
+	<CostOptimization>
+		<ReservedInstances>
+			<Term>1 year</Term>
+			<PaymentOption>All Upfront</PaymentOption>
+			<Coverage>80%</Coverage>
+		</ReservedInstances>
+
+		<SavingsPlans>
+			<Type>Compute</Type>
+			<Commitment>3 years</Commitment>
+			<PaymentOption>Partial Upfront</PaymentOption>
+		</SavingsPlans>
+
+		<SpotInstances>
+			<Enabled>true</Enabled>
+			<MaxPrice>OnDemandPrice * 0.7</MaxPrice>
+			<InterruptionHandling enabled="true" strategy="CheckpointAndRestart"/>
+		</SpotInstances>
+
+		<AutoScaling>
+			<Schedule>
+				<ScaleUp time="08:00" desired="5"/>
+				<ScaleDown time="20:00" desired="3"/>
+				<WeekendScaleDown enabled="true" desired="2"/>
+			</Schedule>
+		</AutoScaling>
+
+		<StorageOptimization>
+			<LifecyclePolicies enabled="true"/>
+			<IntelligentTiering enabled="true"/>
+			<Compression enabled="true" algorithm="Zstandard"/>
+		</StorageOptimization>
+
+		<Monitoring>
+			<Budget>10000</Budget>
+			<Alerts>
+				<Alert threshold="50" type="Actual"/>
+				<Alert threshold="80" type="Forecasted"/>
+				<Alert threshold="100" type="Actual"/>
+			</Alerts>
+			<Reports frequency="Weekly" recipients="finance@company.com,engineering@company.com"/>
+		</Monitoring>
+	</CostOptimization>
+
+	<!-- ======================================================================= -->
+	<!-- Maintenance & Operations -->
+	<!-- ======================================================================= -->
+	<Maintenance>
+		<Windows>
+			<Weekly day="Sunday" startTime="02:00" duration="4"/>
+			<Monthly day="First Sunday" startTime="01:00" duration="6"/>
+		</Windows>
+
+		<Patches>
+			<OS schedule="Monthly" approval="Automatic"/>
+			<Database schedule="Quarterly" approval="Manual"/>
+			<Application schedule="AsReleased" approval="Automatic"/>
+		</Patches>
+
+		<Rotations>
+			<Certificate rotation="Automatic" daysBeforeExpiry="30"/>
+			<EncryptionKey rotation="Quarterly" />
+			<Credentials rotation="90" />
+		</Rotations>
+
+		<HealthChecks>
+			<Synthetic enabled="true" frequency="5"/>
+			<Canary enabled="true" frequency="1"/>
+			<RealUserMonitoring enabled="true"/>
+		</HealthChecks>
+	</Maintenance>
+
+	<!-- ======================================================================= -->
+	<!-- Validation Rules -->
+	<!-- ======================================================================= -->
+	<Validation>
+		<PreDeployment>
+			<Check type="SecurityScan" severity="Critical" required="true"/>
+			<Check type="PerformanceTest" severity="High" required="true"/>
+			<Check type="ComplianceCheck" severity="High" required="true"/>
+			<Check type="CostEstimate" severity="Medium" required="false"/>
+		</PreDeployment>
+
+		<PostDeployment>
+			<Check type="SmokeTest" timeout="300" required="true"/>
+			<Check type="IntegrationTest" timeout="600" required="true"/>
+			<Check type="LoadTest" duration="3600" required="true"/>
+		</PostDeployment>
+
+		<Continuous>
+			<Check type="SecurityScan" frequency="Daily"/>
+			<Check type="ComplianceCheck" frequency="Weekly"/>
+			<Check type="CostAnalysis" frequency="Daily"/>
+		</Continuous>
+	</Validation>
+
+</NEDAConfiguration>

@@ -1,0 +1,830 @@
+{
+  "Version": "2.5.1",
+  "Created": "2024-01-15T10:30:00Z",
+  "Description": "NEDA Knowledge Base Seed Data - Complete system initialization dataset for development and staging environments",
+  "Environment": "Development",
+  "DataSchemaVersion": "1.2",
+  "Metadata": {
+    "GeneratedBy": "NEDA.SeedGenerator",
+    "GeneratorVersion": "1.0.0",
+    "Checksum": "a1b2c3d4e5f67890abcdef1234567890",
+    "TotalEntities": 478,
+    "Compression": "none"
+  },
+  "Entities": {
+    "SystemSettings": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000001",
+        "Key": "System.Version",
+        "Value": "2.5.1",
+        "Description": "Current system version",
+        "Category": "System",
+        "DataType": "String",
+        "IsReadOnly": true,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000002",
+        "Key": "System.MaintenanceMode",
+        "Value": "false",
+        "Description": "System maintenance mode flag",
+        "Category": "System",
+        "DataType": "Boolean",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000003",
+        "Key": "System.Name",
+        "Value": "NEDA - Neural Enhanced Development Assistant",
+        "Description": "System display name",
+        "Category": "System",
+        "DataType": "String",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000004",
+        "Key": "DataRetention.Days",
+        "Value": "365",
+        "Description": "Data retention period in days",
+        "Category": "Data",
+        "DataType": "Integer",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000005",
+        "Key": "Logging.Level",
+        "Value": "Information",
+        "Description": "Default logging level",
+        "Category": "Logging",
+        "DataType": "Enum",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000006",
+        "Key": "Security.PasswordPolicy.MinLength",
+        "Value": "12",
+        "Description": "Minimum password length",
+        "Category": "Security",
+        "DataType": "Integer",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000007",
+        "Key": "Security.PasswordPolicy.RequireUppercase",
+        "Value": "true",
+        "Description": "Require uppercase letters in passwords",
+        "Category": "Security",
+        "DataType": "Boolean",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000008",
+        "Key": "Security.PasswordPolicy.RequireNumbers",
+        "Value": "true",
+        "Description": "Require numbers in passwords",
+        "Category": "Security",
+        "DataType": "Boolean",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000009",
+        "Key": "Security.PasswordPolicy.RequireSpecialChars",
+        "Value": "true",
+        "Description": "Require special characters in passwords",
+        "Category": "Security",
+        "DataType": "Boolean",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000010",
+        "Key": "Security.SessionTimeout.Minutes",
+        "Value": "30",
+        "Description": "Session timeout in minutes",
+        "Category": "Security",
+        "DataType": "Integer",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000011",
+        "Key": "AI.Model.Default",
+        "Value": "gpt-4-turbo",
+        "Description": "Default AI model for processing",
+        "Category": "AI",
+        "DataType": "String",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000012",
+        "Key": "AI.Temperature.Default",
+        "Value": "0.7",
+        "Description": "Default AI temperature setting",
+        "Category": "AI",
+        "DataType": "Decimal",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000013",
+        "Key": "AI.MaxTokens.Default",
+        "Value": "2000",
+        "Description": "Default maximum tokens for AI responses",
+        "Category": "AI",
+        "DataType": "Integer",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000014",
+        "Key": "Storage.Quota.User.Default",
+        "Value": "1073741824",
+        "Description": "Default storage quota per user in bytes (1GB)",
+        "Category": "Storage",
+        "DataType": "Long",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000015",
+        "Key": "Backup.Schedule.Daily",
+        "Value": "02:00",
+        "Description": "Daily backup schedule time (HH:mm)",
+        "Category": "Backup",
+        "DataType": "Time",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000016",
+        "Key": "Notification.Email.Enabled",
+        "Value": "true",
+        "Description": "Enable email notifications",
+        "Category": "Notification",
+        "DataType": "Boolean",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000017",
+        "Key": "Notification.Push.Enabled",
+        "Value": "true",
+        "Description": "Enable push notifications",
+        "Category": "Notification",
+        "DataType": "Boolean",
+        "IsReadOnly": false,
+        "IsEncrypted": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "KnowledgeCategories": [
+      {
+        "Id": "10000000-0000-0000-0000-000000000001",
+        "Name": "Getting Started",
+        "Description": "Introduction and basic concepts for new users",
+        "Slug": "getting-started",
+        "Icon": "rocket",
+        "Color": "#3B82F6",
+        "Order": 1,
+        "ParentId": null,
+        "IsActive": true,
+        "RequiresAuth": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "10000000-0000-0000-0000-000000000002",
+        "Name": "AI & Machine Learning",
+        "Description": "Artificial Intelligence and Machine Learning capabilities",
+        "Slug": "ai-machine-learning",
+        "Icon": "brain",
+        "Color": "#8B5CF6",
+        "Order": 2,
+        "ParentId": null,
+        "IsActive": true,
+        "RequiresAuth": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "10000000-0000-0000-0000-000000000003",
+        "Name": "Development Tools",
+        "Description": "Code generation, debugging, and development assistance",
+        "Slug": "development-tools",
+        "Icon": "code",
+        "Color": "#10B981",
+        "Order": 3,
+        "ParentId": null,
+        "IsActive": true,
+        "RequiresAuth": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "10000000-0000-0000-0000-000000000004",
+        "Name": "3D & Game Development",
+        "Description": "3D modeling, animation, and game development features",
+        "Slug": "3d-game-development",
+        "Icon": "cube",
+        "Color": "#EF4444",
+        "Order": 4,
+        "ParentId": null,
+        "IsActive": true,
+        "RequiresAuth": true,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "10000000-0000-0000-0000-000000000005",
+        "Name": "Security & Compliance",
+        "Description": "Security features, authentication, and compliance guidelines",
+        "Slug": "security-compliance",
+        "Icon": "shield-check",
+        "Color": "#F59E0B",
+        "Order": 5,
+        "ParentId": null,
+        "IsActive": true,
+        "RequiresAuth": true,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "10000000-0000-0000-0000-000000000006",
+        "Name": "API Documentation",
+        "Description": "Complete API reference and integration guides",
+        "Slug": "api-documentation",
+        "Icon": "server",
+        "Color": "#6366F1",
+        "Order": 6,
+        "ParentId": null,
+        "IsActive": true,
+        "RequiresAuth": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "10000000-0000-0000-0000-000000000007",
+        "Name": "Troubleshooting",
+        "Description": "Common issues, error codes, and solutions",
+        "Slug": "troubleshooting",
+        "Icon": "wrench-screwdriver",
+        "Color": "#EC4899",
+        "Order": 7,
+        "ParentId": null,
+        "IsActive": true,
+        "RequiresAuth": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "10000000-0000-0000-0000-000000000008",
+        "Name": "Best Practices",
+        "Description": "Recommended practices, guidelines, and optimization tips",
+        "Slug": "best-practices",
+        "Icon": "star",
+        "Color": "#06B6D4",
+        "Order": 8,
+        "ParentId": null,
+        "IsActive": true,
+        "RequiresAuth": false,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "KnowledgeArticles": [
+      {
+        "Id": "20000000-0000-0000-0000-000000000001",
+        "Title": "Welcome to NEDA - Your AI Development Assistant",
+        "Slug": "welcome-to-neda",
+        "Summary": "A comprehensive introduction to NEDA platform and its capabilities",
+        "Content": "# Welcome to NEDA\n\n## What is NEDA?\n\nNEDA (Neural Enhanced Development Assistant) is an advanced AI-powered platform designed to revolutionize software development, 3D modeling, game design, and creative workflows. It combines cutting-edge artificial intelligence with powerful development tools to provide an unparalleled assistant experience.\n\n## Key Features\n\n### 1. AI-Powered Code Generation\n- Intelligent code completion and generation\n- Context-aware code suggestions\n- Multi-language support (C#, Python, JavaScript, C++, etc.)\n- Real-time code optimization\n\n### 2. 3D & Game Development\n- Automated 3D model generation\n- Intelligent animation tools\n- Game asset creation\n- Performance optimization\n\n### 3. Natural Language Interface\n- Voice command recognition\n- Conversational AI assistant\n- Context-aware responses\n- Multi-modal interaction\n\n### 4. Security & Compliance\n- Enterprise-grade security\n- Compliance with industry standards\n- Audit logging and monitoring\n- Data protection and encryption\n\n## Getting Started\n\n1. **Account Setup**: Create your NEDA account and configure your profile\n2. **Project Creation**: Start your first project or import existing ones\n3. **Assistant Configuration**: Customize your AI assistant preferences\n4. **Integration Setup**: Connect with your development tools and platforms\n\n## Support Resources\n\n- **Documentation**: Complete technical documentation\n- **Tutorials**: Step-by-step guides and video tutorials\n- **Community**: Active developer community and forums\n- **Support**: 24/7 technical support and assistance\n\n## Next Steps\n\nProceed to the \"Quick Start Guide\" for hands-on tutorials or explore the \"Feature Overview\" for detailed information about specific capabilities.",
+        "CategoryId": "10000000-0000-0000-0000-000000000001",
+        "AuthorId": "system",
+        "Status": "Published",
+        "ViewCount": 1250,
+        "HelpfulCount": 89,
+        "FeaturedIndex": 10,
+        "IsFeatured": true,
+        "IsPinned": true,
+        "MetaTitle": "NEDA Platform Introduction | AI Development Assistant",
+        "MetaDescription": "Welcome to NEDA - Your complete AI-powered development assistant for coding, 3D modeling, game development, and creative workflows",
+        "MetaKeywords": [ "neda", "ai", "development", "assistant", "getting-started" ],
+        "PublishedAt": "2024-01-15T10:30:00Z",
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "20000000-0000-0000-0000-000000000002",
+        "Title": "AI Code Generation Best Practices",
+        "Slug": "ai-code-generation-best-practices",
+        "Summary": "Guidelines for effective AI-assisted code generation and review processes",
+        "Content": "# AI Code Generation Best Practices\n\n## Introduction\n\nAI-powered code generation can significantly boost productivity, but requires careful implementation to ensure code quality and maintainability.\n\n## Best Practices\n\n### 1. Context Provision\n- Provide clear, detailed requirements\n- Include relevant code context\n- Specify coding standards and conventions\n- Define expected inputs and outputs\n\n### 2. Code Review Process\n- Always review AI-generated code\n- Verify security implications\n- Check performance considerations\n- Ensure compliance with project standards\n\n### 3. Incremental Implementation\n- Generate code in small, manageable chunks\n- Test each component independently\n- Integrate gradually into existing codebase\n- Maintain version control discipline\n\n### 4. Quality Assurance\n- Implement comprehensive testing\n- Perform security vulnerability scanning\n- Conduct code quality analysis\n- Monitor performance benchmarks\n\n## Common Pitfalls to Avoid\n\n1. **Over-reliance**: Don't accept AI suggestions without understanding\n2. **Security blind spots**: AI may not consider all security implications\n3. **Performance issues**: Generated code may not be optimized\n4. **License compliance**: Ensure generated code respects licenses\n\n## Recommended Workflow\n\n```mermaid\ngraph TD\n    A[Define Requirements] --> B[Generate Code]\n    B --> C[Review & Modify]\n    C --> D[Test Thoroughly]\n    D --> E[Integrate]\n    E --> F[Document]\n```\n\n## Advanced Techniques\n\n### Prompt Engineering\n- Use specific, detailed prompts\n- Include examples and patterns\n- Specify constraints and requirements\n- Iterate and refine prompts\n\n### Context Management\n- Maintain conversation history\n- Reference previous code snippets\n- Provide architectural context\n- Include business logic overview\n\n## Conclusion\n\nAI code generation is a powerful tool that, when used properly, can dramatically improve development efficiency while maintaining code quality standards.",
+        "CategoryId": "10000000-0000-0000-0000-000000000002",
+        "AuthorId": "system",
+        "Status": "Published",
+        "ViewCount": 3421,
+        "HelpfulCount": 256,
+        "FeaturedIndex": 8,
+        "IsFeatured": true,
+        "IsPinned": false,
+        "MetaTitle": "AI Code Generation Guidelines | Best Practices",
+        "MetaDescription": "Comprehensive guide to effective AI-assisted code generation with best practices, workflow recommendations, and quality assurance processes",
+        "MetaKeywords": [ "ai", "code-generation", "best-practices", "development", "quality" ],
+        "PublishedAt": "2024-01-15T10:30:00Z",
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "20000000-0000-0000-0000-000000000003",
+        "Title": "3D Model Generation with AI",
+        "Slug": "3d-model-generation-with-ai",
+        "Summary": "Learn how to create and optimize 3D models using NEDA's AI-powered tools",
+        "Content": "# 3D Model Generation with AI\n\n## Overview\n\nNEDA provides advanced AI capabilities for 3D model generation, optimization, and enhancement. This guide covers the complete workflow from concept to final model.\n\n## Generation Process\n\n### 1. Input Methods\n\n#### Text Description\n```json\n{\n  \"object\": \"futuristic sports car\",\n  \"style\": \"cyberpunk\",\n  \"polygon_count\": \"medium\",\n  \"textures\": \"PBR materials\",\n  \"animation\": \"suspension movement\"\n}\n```\n\n#### Image Reference\n- Upload concept art or sketches\n- Use reference images for style\n- Provide multiple angles for consistency\n\n#### Voice Description\n- Describe models using natural language\n- Specify details verbally\n- Make real-time adjustments\n\n### 2. Model Types Supported\n\n- **Characters**: Humanoids, creatures, NPCs\n- **Vehicles**: Cars, aircraft, spacecraft\n- **Environments**: Buildings, landscapes, interiors\n- **Props**: Weapons, tools, furniture\n- **Architectural**: Buildings, structures, urban planning\n\n### 3. Optimization Features\n\n#### Automatic Optimization\n- Polygon reduction with quality preservation\n- LOD (Level of Detail) generation\n- UV mapping optimization\n- Mesh cleanup and repair\n\n#### Material Generation\n- AI-generated PBR materials\n- Texture synthesis\n- Normal map generation\n- Substance Painter integration\n\n## Workflow Example\n\n### Step 1: Concept Generation\n1. Describe your model requirements\n2. Select generation parameters\n3. Generate initial concepts\n4. Refine based on feedback\n\n### Step 2: Model Refinement\n1. Adjust proportions and details\n2. Optimize polygon distribution\n3. Generate UV maps\n4. Create material assignments\n\n### Step 3: Export and Integration\n1. Choose export format (FBX, OBJ, GLTF)\n2. Configure export settings\n3. Generate animations if needed\n4. Test in target engine\n\n## Performance Guidelines\n\n### Polygon Count Recommendations\n| Model Type | Target Polygons | LOD Levels |\n|------------|-----------------|------------|\n| Character | 15,000-30,000 | 4 |\n| Vehicle | 10,000-25,000 | 3 |\n| Environment | 5,000-50,000 | 2-3 |\n| Prop | 500-5,000 | 2 |\n\n### Optimization Tips\n- Use appropriate LOD distances\n- Combine meshes where possible\n- Optimize draw calls\n- Use instancing for repeated objects\n\n## Export Formats\n\n| Format | Best For | Features |\n|--------|----------|----------|\n| **FBX** | Game Engines | Animation, Materials, Hierarchy |\n| **GLTF/GLB** | Web, Mobile | Compact, Modern, PBR |\n| **OBJ** | Simplicity | Geometry only, Widely supported |\n| **USDZ** | AR/VR | Apple ecosystem, AR Quick Look |\n\n## Integration with Engines\n\n### Unity Integration\n1. Import FBX/GLTF files\n2. Set up materials and textures\n3. Configure import settings\n4. Set up animations and rigging\n\n### Unreal Engine Integration\n1. Import with Datasmith\n2. Set up material instances\n3. Configure collision meshes\n4. Set up LOD groups\n\n## Advanced Features\n\n### Procedural Generation\n- Generate variations algorithmically\n- Create modular asset systems\n- Implement rule-based generation\n- Use parametric controls\n\n### AI-Assisted Retopology\n- Automatically create clean topology\n- Generate edge loops for animation\n- Optimize for subdivision surfaces\n- Maintain shape fidelity\n\n## Troubleshooting\n\n### Common Issues\n1. **High polygon count**: Use automatic optimization\n2. **UV issues**: Regenerate UV maps\n3. **Material problems**: Reassign or regenerate materials\n4. **Export errors**: Check format compatibility\n\n## Best Practices\n\n1. Start with clear requirements\n2. Use reference images\n3. Generate at appropriate resolution\n4. Test in target environment early\n5. Iterate based on feedback\n\n## Conclusion\n\nAI-powered 3D model generation significantly accelerates the creation process while maintaining quality standards. By following these guidelines, you can efficiently produce optimized models ready for any pipeline.",
+        "CategoryId": "10000000-0000-0000-0000-000000000004",
+        "AuthorId": "system",
+        "Status": "Published",
+        "ViewCount": 1892,
+        "HelpfulCount": 142,
+        "FeaturedIndex": 7,
+        "IsFeatured": true,
+        "IsPinned": false,
+        "MetaTitle": "AI 3D Model Generation | Complete Guide",
+        "MetaDescription": "Complete guide to AI-powered 3D model generation, optimization, and integration with game engines and 3D tools",
+        "MetaKeywords": [ "3d", "ai", "modeling", "generation", "optimization", "game-development" ],
+        "PublishedAt": "2024-01-15T10:30:00Z",
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "20000000-0000-0000-0000-000000000004",
+        "Title": "API Authentication & Security",
+        "Slug": "api-authentication-security",
+        "Summary": "Complete guide to NEDA API authentication methods and security best practices",
+        "Content": "# API Authentication & Security\n\n## Overview\n\nNEDA provides multiple authentication methods to secure API access. This guide covers authentication mechanisms, security best practices, and implementation examples.\n\n## Authentication Methods\n\n### 1. API Keys\n\n#### Generation\n```bash\ncurl -X POST https://api.neda.ai/v1/auth/apikey \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"name\": \"MyAppKey\", \"permissions\": [\"read\", \"write\"]}'\n```\n\n#### Usage\n```csharp\nvar client = new NEDAClient(new NEDAClientOptions\n{\n    ApiKey = \"your-api-key-here\",\n    BaseUrl = \"https://api.neda.ai/v1\"\n});\n```\n\n### 2. OAuth 2.0 / OpenID Connect\n\n#### Authorization Code Flow\n```mermaid\ngraph LR\n    A[Client] --> B[Authorization Endpoint]\n    B --> C[User Consent]\n    C --> D[Authorization Code]\n    D --> E[Token Endpoint]\n    E --> F[Access Token]\n    F --> G[API Access]\n```\n\n#### Configuration\n```json\n{\n  \"oauth\": {\n    \"client_id\": \"your-client-id\",\n    \"client_secret\": \"your-client-secret\",\n    \"authorization_endpoint\": \"https://auth.neda.ai/oauth/authorize\",\n    \"token_endpoint\": \"https://auth.neda.ai/oauth/token\",\n    \"redirect_uri\": \"https://your-app.com/callback\",\n    \"scopes\": [\"profile\", \"email\", \"api\"]\n  }\n}\n```\n\n### 3. JWT Tokens\n\n#### Structure\n```json\n{\n  \"header\": {\n    \"alg\": \"RS256\",\n    \"typ\": \"JWT\"\n  },\n  \"payload\": {\n    \"sub\": \"user-id\",\n    \"name\": \"John Doe\",\n    \"iat\": 1516239022,\n    \"exp\": 1516242622,\n    \"scopes\": [\"api.read\", \"api.write\"]\n  }\n}\n```\n\n#### Validation\n```csharp\nvar tokenHandler = new JwtSecurityTokenHandler();\nvar validationParameters = new TokenValidationParameters\n{\n    ValidateIssuer = true,\n    ValidIssuer = \"https://auth.neda.ai\",\n    ValidateAudience = true,\n    ValidAudience = \"api.neda.ai\",\n    ValidateLifetime = true,\n    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))\n};\n```\n\n## Security Best Practices\n\n### 1. Credential Management\n- Never hardcode credentials\n- Use environment variables or secure vaults\n- Rotate credentials regularly\n- Implement credential encryption\n\n### 2. Rate Limiting\n```json\n{\n  \"rate_limits\": {\n    \"per_second\": 10,\n    \"per_minute\": 100,\n    \"per_hour\": 1000,\n    \"per_day\": 10000\n  }\n}\n```\n\n### 3. Input Validation\n```csharp\n[HttpPost(\"execute\")]\npublic async Task<IActionResult> ExecuteCommand([FromBody] CommandRequest request)\n{\n    // Validate input\n    var validator = new CommandRequestValidator();\n    var validationResult = await validator.ValidateAsync(request);\n    \n    if (!validationResult.IsValid)\n    {\n        return BadRequest(validationResult.Errors);\n    }\n    \n    // Process request\n    // ...\n}\n```\n\n### 4. Audit Logging\n```csharp\npublic class AuditMiddleware\n{\n    private readonly RequestDelegate _next;\n    private readonly ILogger<AuditMiddleware> _logger;\n    \n    public async Task InvokeAsync(HttpContext context)\n    {\n        var auditEntry = new AuditEntry\n        {\n            Timestamp = DateTime.UtcNow,\n            UserId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value,\n            Action = $\"{context.Request.Method} {context.Request.Path}\",\n            IpAddress = context.Connection.RemoteIpAddress?.ToString(),\n            UserAgent = context.Request.Headers[\"User-Agent\"].ToString()\n        };\n        \n        // Log audit entry\n        await _auditService.LogAsync(auditEntry);\n        \n        await _next(context);\n    }\n}\n```\n\n## Error Handling\n\n### Standard Error Response\n```json\n{\n  \"error\": {\n    \"code\": \"AUTH_001\",\n    \"message\": \"Invalid API key\",\n    \"details\": \"The provided API key is invalid or has expired\",\n    \"timestamp\": \"2024-01-15T10:30:00Z\",\n    \"request_id\": \"req_1234567890abcdef\"\n  }\n}\n```\n\n### Common Error Codes\n| Code | Meaning | Resolution |\n|------|---------|------------|\n| AUTH_001 | Invalid credentials | Verify API key or token |\n| AUTH_002 | Token expired | Refresh token |\n| AUTH_003 | Insufficient permissions | Request appropriate scopes |\n| AUTH_004 | Rate limit exceeded | Wait and retry |\n\n## Implementation Examples\n\n### Python Example\n```python\nimport requests\nfrom datetime import datetime, timedelta\nimport jwt\n\nclass NEDAClient:\n    def __init__(self, api_key, base_url=\"https://api.neda.ai/v1\"):\n        self.api_key = api_key\n        self.base_url = base_url\n        self.session = requests.Session()\n        self.session.headers.update({\n            \"Authorization\": f\"Bearer {api_key}\",\n            \"Content-Type\": \"application/json\"\n        })\n    \n    def generate_jwt(self, user_id, private_key):\n        payload = {\n            \"sub\": user_id,\n            \"iat\": datetime.utcnow(),\n            \"exp\": datetime.utcnow() + timedelta(hours=1)\n        }\n        return jwt.encode(payload, private_key, algorithm=\"RS256\")\n```\n\n### JavaScript/Node.js Example\n```javascript\nconst axios = require('axios');\nconst jwt = require('jsonwebtoken');\n\nclass NEDAClient {\n    constructor(apiKey, baseUrl = 'https://api.neda.ai/v1') {\n        this.client = axios.create({\n            baseURL: baseUrl,\n            headers: {\n                'Authorization': `Bearer ${apiKey}`,\n                'Content-Type': 'application/json'\n            }\n        });\n    }\n    \n    generateToken(userId, privateKey) {\n        return jwt.sign(\n            { sub: userId, iat: Math.floor(Date.now() / 1000) },\n            privateKey,\n            { algorithm: 'RS256', expiresIn: '1h' }\n        );\n    }\n}\n```\n\n## Monitoring and Alerts\n\n### Security Monitoring\n- Monitor failed authentication attempts\n- Track API usage patterns\n- Set up anomaly detection\n- Configure alert thresholds\n\n### Compliance Requirements\n- GDPR compliance for user data\n- HIPAA compliance for health data\n- PCI DSS for payment processing\n- SOC 2 Type II certification\n\n## Testing Security\n\n### Penetration Testing\n1. Test authentication bypass attempts\n2. Test injection vulnerabilities\n3. Test rate limiting effectiveness\n4. Test token validation robustness\n\n### Security Scanning\n```bash\n# Run security scan\nnpm audit\n# or\ndotnet list package --vulnerable\n# or\nsnyk test\n```\n\n## Conclusion\n\nImplementing robust authentication and security practices is essential for protecting both your application and user data. NEDA provides comprehensive security features that, when properly implemented, ensure secure API access while maintaining developer productivity.",
+        "CategoryId": "10000000-0000-0000-0000-000000000005",
+        "AuthorId": "system",
+        "Status": "Published",
+        "ViewCount": 2789,
+        "HelpfulCount": 189,
+        "FeaturedIndex": 9,
+        "IsFeatured": true,
+        "IsPinned": true,
+        "MetaTitle": "API Authentication & Security Guide | NEDA",
+        "MetaDescription": "Complete guide to NEDA API authentication methods, security best practices, and implementation examples for secure API integration",
+        "MetaKeywords": [ "api", "authentication", "security", "jwt", "oauth", "best-practices" ],
+        "PublishedAt": "2024-01-15T10:30:00Z",
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "KnowledgeTags": [
+      {
+        "Id": "30000000-0000-0000-0000-000000000001",
+        "Name": "ai",
+        "Description": "Artificial Intelligence topics",
+        "Slug": "ai",
+        "Color": "#8B5CF6",
+        "UsageCount": 42,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "30000000-0000-0000-0000-000000000002",
+        "Name": "development",
+        "Description": "Software development topics",
+        "Slug": "development",
+        "Color": "#10B981",
+        "UsageCount": 38,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "30000000-0000-0000-0000-000000000003",
+        "Name": "3d-modeling",
+        "Description": "3D modeling and animation",
+        "Slug": "3d-modeling",
+        "Color": "#EF4444",
+        "UsageCount": 25,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "30000000-0000-0000-0000-000000000004",
+        "Name": "security",
+        "Description": "Security and compliance topics",
+        "Slug": "security",
+        "Color": "#F59E0B",
+        "UsageCount": 31,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "30000000-0000-0000-0000-000000000005",
+        "Name": "api",
+        "Description": "API documentation and integration",
+        "Slug": "api",
+        "Color": "#6366F1",
+        "UsageCount": 29,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "30000000-0000-0000-0000-000000000006",
+        "Name": "beginner",
+        "Description": "Beginner-friendly content",
+        "Slug": "beginner",
+        "Color": "#3B82F6",
+        "UsageCount": 18,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "30000000-0000-0000-0000-000000000007",
+        "Name": "best-practices",
+        "Description": "Best practices and guidelines",
+        "Slug": "best-practices",
+        "Color": "#06B6D4",
+        "UsageCount": 27,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "30000000-0000-0000-0000-000000000008",
+        "Name": "tutorial",
+        "Description": "Step-by-step tutorials",
+        "Slug": "tutorial",
+        "Color": "#EC4899",
+        "UsageCount": 22,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "30000000-0000-0000-0000-000000000009",
+        "Name": "game-development",
+        "Description": "Game development topics",
+        "Slug": "game-development",
+        "Color": "#8B5CF6",
+        "UsageCount": 19,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "30000000-0000-0000-0000-000000000010",
+        "Name": "machine-learning",
+        "Description": "Machine learning topics",
+        "Slug": "machine-learning",
+        "Color": "#10B981",
+        "UsageCount": 16,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "KnowledgeRelationships": [
+      {
+        "Id": "40000000-0000-0000-0000-000000000001",
+        "SourceId": "20000000-0000-0000-0000-000000000001",
+        "SourceType": "Article",
+        "TargetId": "30000000-0000-0000-0000-000000000001",
+        "TargetType": "Tag",
+        "RelationshipType": "TaggedWith",
+        "Weight": 1.0,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "40000000-0000-0000-0000-000000000002",
+        "SourceId": "20000000-0000-0000-0000-000000000001",
+        "SourceType": "Article",
+        "TargetId": "30000000-0000-0000-0000-000000000002",
+        "TargetType": "Tag",
+        "RelationshipType": "TaggedWith",
+        "Weight": 0.9,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "40000000-0000-0000-0000-000000000003",
+        "SourceId": "20000000-0000-0000-0000-000000000001",
+        "SourceType": "Article",
+        "TargetId": "30000000-0000-0000-0000-000000000006",
+        "TargetType": "Tag",
+        "RelationshipType": "TaggedWith",
+        "Weight": 0.8,
+        "CreatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "ConversationTemplates": [
+      {
+        "Id": "50000000-0000-0000-0000-000000000001",
+        "Name": "Welcome Greeting",
+        "Description": "Initial greeting for new users",
+        "Template": "Hello! I'm NEDA, your Neural Enhanced Development Assistant. I'm here to help you with coding, 3D modeling, game development, and much more. How can I assist you today?",
+        "Language": "en-US",
+        "Category": "Greeting",
+        "Personality": "Friendly",
+        "IsActive": true,
+        "Priority": 10,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "50000000-0000-0000-0000-000000000002",
+        "Name": "Code Assistance",
+        "Description": "Template for code-related assistance",
+        "Template": "I can help you with code generation, debugging, optimization, and best practices. Please describe what you're working on or paste your code below.",
+        "Language": "en-US",
+        "Category": "Code",
+        "Personality": "Technical",
+        "IsActive": true,
+        "Priority": 8,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "50000000-0000-0000-0000-000000000003",
+        "Name": "3D Modeling Help",
+        "Description": "Template for 3D modeling assistance",
+        "Template": "I can assist with 3D model generation, optimization, texturing, and animation. Describe your model requirements or upload reference images to get started.",
+        "Language": "en-US",
+        "Category": "3D",
+        "Personality": "Creative",
+        "IsActive": true,
+        "Priority": 7,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "TrainingDatasets": [
+      {
+        "Id": "60000000-0000-0000-0000-000000000001",
+        "Name": "Code Generation Samples",
+        "Description": "Sample code snippets for AI training",
+        "DataPath": "/datasets/code/samples.json",
+        "Format": "JSON",
+        "SizeInBytes": 52428800,
+        "SampleCount": 25000,
+        "Language": "multilingual",
+        "IsProcessed": true,
+        "ProcessingDate": "2024-01-14T22:00:00Z",
+        "QualityScore": 0.92,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "60000000-0000-0000-0000-000000000002",
+        "Name": "3D Model Descriptions",
+        "Description": "Text descriptions paired with 3D models",
+        "DataPath": "/datasets/3d/descriptions.json",
+        "Format": "JSON",
+        "SizeInBytes": 104857600,
+        "SampleCount": 15000,
+        "Language": "en-US",
+        "IsProcessed": true,
+        "ProcessingDate": "2024-01-14T23:00:00Z",
+        "QualityScore": 0.88,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "ModelConfigurations": [
+      {
+        "Id": "70000000-0000-0000-0000-000000000001",
+        "Name": "NLP Code Model v2.5",
+        "Description": "Primary natural language processing model for code generation",
+        "ModelType": "NLP",
+        "Version": "2.5.1",
+        "Configuration": {
+          "architecture": "transformer",
+          "parameters": "13B",
+          "contextLength": 8192,
+          "temperature": 0.7,
+          "topP": 0.9,
+          "frequencyPenalty": 0.1,
+          "presencePenalty": 0.1
+        },
+        "FilePath": "/models/nlp/code/v2.5/model.bin",
+        "IsActive": true,
+        "PerformanceMetrics": {
+          "accuracy": 0.89,
+          "latency": 125,
+          "throughput": 42
+        },
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "70000000-0000-0000-0000-000000000002",
+        "Name": "3D Generation Model v1.2",
+        "Description": "3D model generation from text descriptions",
+        "ModelType": "3DGeneration",
+        "Version": "1.2.0",
+        "Configuration": {
+          "architecture": "diffusion",
+          "parameters": "4.2B",
+          "resolution": "512x512",
+          "steps": 50,
+          "guidanceScale": 7.5
+        },
+        "FilePath": "/models/3d/generation/v1.2/model.ckpt",
+        "IsActive": true,
+        "PerformanceMetrics": {
+          "quality": 0.85,
+          "generationTime": 1800,
+          "fidelity": 0.78
+        },
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "AnalyticsDashboards": [
+      {
+        "Id": "80000000-0000-0000-0000-000000000001",
+        "Name": "System Overview",
+        "Description": "Main system monitoring and performance dashboard",
+        "Layout": {
+          "type": "grid",
+          "columns": 12,
+          "widgets": [
+            {
+              "id": "cpu-usage",
+              "type": "metric",
+              "title": "CPU Usage",
+              "position": {
+                "x": 0,
+                "y": 0,
+                "w": 3,
+                "h": 2
+              },
+              "config": {
+                "metric": "cpu.percent",
+                "aggregation": "avg"
+              }
+            },
+            {
+              "id": "memory-usage",
+              "type": "metric",
+              "title": "Memory Usage",
+              "position": {
+                "x": 3,
+                "y": 0,
+                "w": 3,
+                "h": 2
+              },
+              "config": {
+                "metric": "memory.percent",
+                "aggregation": "avg"
+              }
+            }
+          ]
+        },
+        "IsDefault": true,
+        "RefreshInterval": 30,
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "UserPreferences": [
+      {
+        "Id": "90000000-0000-0000-0000-000000000001",
+        "UserId": "system",
+        "Key": "ui.theme",
+        "Value": "dark",
+        "Description": "UI theme preference",
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "90000000-0000-0000-0000-000000000002",
+        "UserId": "system",
+        "Key": "code.editor.fontSize",
+        "Value": "14",
+        "Description": "Code editor font size",
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "ScheduledTasks": [
+      {
+        "Id": "A0000000-0000-0000-0000-000000000001",
+        "Name": "Daily Database Backup",
+        "Description": "Automated daily database backup",
+        "Schedule": "0 2 * * *",
+        "TaskType": "DatabaseBackup",
+        "IsEnabled": true,
+        "LastRun": "2024-01-15T02:00:00Z",
+        "NextRun": "2024-01-16T02:00:00Z",
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      },
+      {
+        "Id": "A0000000-0000-0000-0000-000000000002",
+        "Name": "Model Retraining",
+        "Description": "Weekly AI model retraining",
+        "Schedule": "0 0 * * 0",
+        "TaskType": "ModelTraining",
+        "IsEnabled": true,
+        "LastRun": "2024-01-14T00:00:00Z",
+        "NextRun": "2024-01-21T00:00:00Z",
+        "CreatedAt": "2024-01-15T10:30:00Z",
+        "UpdatedAt": "2024-01-15T10:30:00Z"
+      }
+    ]
+  },
+  "Relationships": {
+    "ArticleTags": [
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000001",
+        "TagId": "30000000-0000-0000-0000-000000000001"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000001",
+        "TagId": "30000000-0000-0000-0000-000000000002"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000001",
+        "TagId": "30000000-0000-0000-0000-000000000006"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000002",
+        "TagId": "30000000-0000-0000-0000-000000000001"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000002",
+        "TagId": "30000000-0000-0000-0000-000000000002"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000002",
+        "TagId": "30000000-0000-0000-0000-000000000007"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000003",
+        "TagId": "30000000-0000-0000-0000-000000000001"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000003",
+        "TagId": "30000000-0000-0000-0000-000000000003"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000003",
+        "TagId": "30000000-0000-0000-0000-000000000009"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000004",
+        "TagId": "30000000-0000-0000-0000-000000000004"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000004",
+        "TagId": "30000000-0000-0000-0000-000000000005"
+      },
+      {
+        "ArticleId": "20000000-0000-0000-0000-000000000004",
+        "TagId": "30000000-0000-0000-0000-000000000007"
+      }
+    ],
+    "CategoryHierarchy": [
+      {
+        "ParentId": "10000000-0000-0000-0000-000000000002",
+        "ChildId": "10000000-0000-0000-0000-00000000000A",
+        "Depth": 1
+      }
+    ]
+  },
+  "Configuration": {
+    "SeedStrategy": "Development",
+    "ClearExisting": false,
+    "OverwriteExisting": true,
+    "ValidateAfterSeeding": true,
+    "EnableRelationships": true,
+    "BatchSize": 100,
+    "TimeoutSeconds": 300
+  }
+}

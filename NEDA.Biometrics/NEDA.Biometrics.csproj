@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- ================= TEMEL ================= -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>NEDA.Biometrics</AssemblyName>
+    <RootNamespace>NEDA.Biometrics</RootNamespace>
+    <OutputType>Library</OutputType>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <!-- Native CV libÃ¢â‚¬â„¢ler iÃƒÂ§in -->
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <!-- ================= PROJE REFERANSLARI ================= -->
+  <ItemGroup>
+    <ProjectReference Include="..\NEDA.Core\NEDA.Core.csproj" />
+    <ProjectReference Include="..\NEDA.Interface\NEDA.Interface.csproj" />
+    <ProjectReference Include="..\NEDA.AI\NEDA.AI.csproj" />
+  </ItemGroup>
+  <!-- ================= COMPUTER VISION ================= -->
+  <ItemGroup>
+    <PackageReference Include="OpenCvSharp4" Version="4.8.0.20230708" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.8.0.20230708" />
+    <PackageReference Include="Emgu.CV" Version="4.8.1.5350" />
+    <PackageReference Include="Emgu.CV.Bitmap" Version="4.8.1.5350" />
+    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.8.1.5350" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="FluentValidation" Version="11.9.2" />
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NodaTime" Version="3.1.9" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+  </ItemGroup>
+  <!-- ================= FACE / BIOMETRIC ================= -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.CognitiveServices.Vision.Face" Version="2.6.0-preview.1" />
+  </ItemGroup>
+  <!-- ================= ML ABSTRACTION ================= -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML" Version="3.0.1" />
+  </ItemGroup>
+  <!-- ================= DI (SADECE ABSTRACTION) ================= -->
+  <ItemGroup>
+  </ItemGroup>
+  <!-- ================= BUILD POLÃ„Â°TÃ„Â°KASI ================= -->
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

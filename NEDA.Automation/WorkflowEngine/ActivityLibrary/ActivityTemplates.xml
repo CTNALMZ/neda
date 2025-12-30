@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActivityTemplates xmlns="http://schemas.neda.com/activities/templates"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://schemas.neda.com/activities/templates ActivityTemplates.xsd">
+
+	<!-- Template Library Version Information -->
+	<LibraryInfo>
+		<Version>3.2.1</Version>
+		<Created>2024-01-15T08:00:00Z</Created>
+		<LastModified>2024-01-20T14:30:00Z</LastModified>
+		<Author>NEDA System Architects</Author>
+		<Description>NEDA Activity Template Library - Professional Grade Workflow Components</Description>
+	</LibraryInfo>
+
+	<!-- Core System Activities -->
+	<Category Name="System" Description="Core system-level activities">
+
+		<!-- File System Activities -->
+		<ActivityTemplate Id="FileRead" Name="Read File" Version="2.1.0">
+			<Description>Reads content from a file with configurable encoding and buffering</Description>
+			<Category>System/File</Category>
+			<Tags>
+				<Tag>File</Tag>
+				<Tag>IO</Tag>
+				<Tag>Input</Tag>
+				<Tag>System</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="FilePath" Type="System.String" IsRequired="true">
+					<Description>Full path to the file to read</Description>
+					<Constraints>
+						<RegexConstraint Pattern="^[a-zA-Z]:\\(?:[^\\/:*?&quot;&lt;&gt;|\r\n]+\\)*[^\\/:*?&quot;&lt;&gt;|\r\n]*$"
+									   Message="Must be a valid Windows file path" />
+					</Constraints>
+				</Parameter>
+				<Parameter Name="Encoding" Type="System.String" IsRequired="false" DefaultValue="UTF-8">
+					<Description>File encoding (UTF-8, ASCII, Unicode, etc.)</Description>
+					<Constraints>
+						<EnumConstraint>
+							<AllowedValue>UTF-8</AllowedValue>
+							<AllowedValue>UTF-16</AllowedValue>
+							<AllowedValue>ASCII</AllowedValue>
+							<AllowedValue>Unicode</AllowedValue>
+							<AllowedValue>UTF-32</AllowedValue>
+						</EnumConstraint>
+					</Constraints>
+				</Parameter>
+				<Parameter Name="BufferSize" Type="System.Int32" IsRequired="false" DefaultValue="4096">
+					<Description>Read buffer size in bytes</Description>
+					<Constraints>
+						<RangeConstraint MinValue="1024" MaxValue="1048576" Message="Buffer size must be between 1KB and 1MB" />
+					</Constraints>
+				</Parameter>
+				<Parameter Name="RetryOnLock" Type="System.Boolean" IsRequired="false" DefaultValue="true">
+					<Description>Retry if file is locked by another process</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="Content" Type="System.String">
+					<Description>The content read from the file</Description>
+				</Parameter>
+				<Parameter Name="FileSize" Type="System.Int64">
+					<Description>Size of the file in bytes</Description>
+				</Parameter>
+				<Parameter Name="ReadTime" Type="System.Double">
+					<Description>Time taken to read the file in milliseconds</Description>
+				</Parameter>
+				<Parameter Name="EncodingUsed" Type="System.String">
+					<Description>Actual encoding used for reading</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="TimeoutSeconds" Value="30" Type="System.Int32">
+					<Description>Maximum time to wait for file access</Description>
+				</Property>
+				<Property Name="CreateBackup" Value="false" Type="System.Boolean">
+					<Description>Create backup before reading (for safety)</Description>
+				</Property>
+				<Property Name="ValidateChecksum" Value="true" Type="System.Boolean">
+					<Description>Calculate and validate file checksum</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="3" InitialDelay="00:00:01" BackoffMultiplier="2.0" />
+			<TimeoutPolicy ExecutionTimeout="00:01:00" StartupTimeout="00:00:10" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Core Team" />
+				<Item Key="PerformanceImpact" Value="Low" />
+				<Item Key="SecurityLevel" Value="Medium" />
+				<Item Key="AuditRequired" Value="true" />
+				<Item Key="ConcurrentExecution" Value="true" />
+			</Metadata>
+		</ActivityTemplate>
+
+		<ActivityTemplate Id="FileWrite" Name="Write File" Version="2.1.0">
+			<Description>Writes content to a file with configurable encoding and locking</Description>
+			<Category>System/File</Category>
+			<Tags>
+				<Tag>File</Tag>
+				<Tag>IO</Tag>
+				<Tag>Output</Tag>
+				<Tag>System</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="FilePath" Type="System.String" IsRequired="true">
+					<Description>Full path to the file to write</Description>
+				</Parameter>
+				<Parameter Name="Content" Type="System.String" IsRequired="true">
+					<Description>Content to write to the file</Description>
+				</Parameter>
+				<Parameter Name="Encoding" Type="System.String" IsRequired="false" DefaultValue="UTF-8">
+					<Description>File encoding to use</Description>
+				</Parameter>
+				<Parameter Name="AppendMode" Type="System.Boolean" IsRequired="false" DefaultValue="false">
+					<Description>Append to existing file instead of overwriting</Description>
+				</Parameter>
+				<Parameter Name="CreateDirectory" Type="System.Boolean" IsRequired="false" DefaultValue="true">
+					<Description>Create parent directories if they don't exist</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="BytesWritten" Type="System.Int64">
+					<Description>Number of bytes written</Description>
+				</Parameter>
+				<Parameter Name="WriteTime" Type="System.Double">
+					<Description>Time taken to write the file in milliseconds</Description>
+				</Parameter>
+				<Parameter Name="FileHash" Type="System.String">
+					<Description>SHA256 hash of the written content</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="AtomicWrite" Value="true" Type="System.Boolean">
+					<Description>Use atomic write operations (write to temp then rename)</Description>
+				</Property>
+				<Property Name="BufferSize" Value="8192" Type="System.Int32">
+					<Description>Write buffer size in bytes</Description>
+				</Property>
+				<Property Name="FilePermissions" Value="ReadWrite" Type="System.String">
+					<Description>File access permissions to set</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="5" InitialDelay="00:00:02" BackoffMultiplier="1.5" />
+			<TimeoutPolicy ExecutionTimeout="00:02:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Core Team" />
+				<Item Key="PerformanceImpact" Value="Medium" />
+				<Item Key="SecurityLevel" Value="High" />
+				<Item Key="AuditRequired" Value="true" />
+			</Metadata>
+		</ActivityTemplate>
+
+		<!-- Process Management Activities -->
+		<ActivityTemplate Id="ProcessStart" Name="Start Process" Version="1.5.0">
+			<Description>Starts an external process with configurable arguments and environment</Description>
+			<Category>System/Process</Category>
+			<Tags>
+				<Tag>Process</Tag>
+				<Tag>Execution</Tag>
+				<Tag>External</Tag>
+				<Tag>System</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="FileName" Type="System.String" IsRequired="true">
+					<Description>Path to the executable file</Description>
+				</Parameter>
+				<Parameter Name="Arguments" Type="System.String" IsRequired="false">
+					<Description>Command line arguments</Description>
+				</Parameter>
+				<Parameter Name="WorkingDirectory" Type="System.String" IsRequired="false">
+					<Description>Working directory for the process</Description>
+				</Parameter>
+				<Parameter Name="EnvironmentVariables" Type="System.Collections.Generic.Dictionary&lt;System.String,System.String&gt;" IsRequired="false">
+					<Description>Environment variables to set for the process</Description>
+				</Parameter>
+				<Parameter Name="RedirectOutput" Type="System.Boolean" IsRequired="false" DefaultValue="true">
+					<Description>Redirect standard output and error</Description>
+				</Parameter>
+				<Parameter Name="UseShellExecute" Type="System.Boolean" IsRequired="false" DefaultValue="false">
+					<Description>Use shell execute (required for GUI applications)</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="ProcessId" Type="System.Int32">
+					<Description>ID of the started process</Description>
+				</Parameter>
+				<Parameter Name="ExitCode" Type="System.Int32">
+					<Description>Exit code of the process</Description>
+				</Parameter>
+				<Parameter Name="StandardOutput" Type="System.String">
+					<Description>Standard output from the process</Description>
+				</Parameter>
+				<Parameter Name="StandardError" Type="System.String">
+					<Description>Standard error from the process</Description>
+				</Parameter>
+				<Parameter Name="ExecutionTime" Type="System.Double">
+					<Description>Total execution time in milliseconds</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="TimeoutMinutes" Value="10" Type="System.Int32">
+					<Description>Maximum execution time before timeout</Description>
+				</Property>
+				<Property Name="PriorityClass" Value="Normal" Type="System.String">
+					<Description>Process priority (Idle, BelowNormal, Normal, AboveNormal, High, RealTime)</Description>
+				</Property>
+				<Property Name="CreateNoWindow" Value="true" Type="System.Boolean">
+					<Description>Create process without a window</Description>
+				</Property>
+				<Property Name="ErrorDialog" Value="false" Type="System.Boolean">
+					<Description>Show error dialog if process fails to start</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="2" InitialDelay="00:00:05" />
+			<TimeoutPolicy ExecutionTimeout="00:10:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA System Team" />
+				<Item Key="PerformanceImpact" Value="Variable" />
+				<Item Key="SecurityLevel" Value="High" />
+				<Item Key="RequiresElevation" Value="false" />
+			</Metadata>
+		</ActivityTemplate>
+
+		<!-- Registry Activities -->
+		<ActivityTemplate Id="RegistryRead" Name="Read Registry" Version="1.2.0">
+			<Description>Reads values from Windows Registry with security validation</Description>
+			<Category>System/Registry</Category>
+			<Tags>
+				<Tag>Registry</Tag>
+				<Tag>Windows</Tag>
+				<Tag>Configuration</Tag>
+				<Tag>System</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="RegistryPath" Type="System.String" IsRequired="true">
+					<Description>Full registry path (e.g., HKEY_LOCAL_MACHINE\Software\MyApp)</Description>
+				</Parameter>
+				<Parameter Name="ValueName" Type="System.String" IsRequired="false">
+					<Description>Name of the value to read (empty for default value)</Description>
+				</Parameter>
+				<Parameter Name="RegistryHive" Type="System.String" IsRequired="false" DefaultValue="LocalMachine">
+					<Description>Registry hive to access</Description>
+					<Constraints>
+						<EnumConstraint>
+							<AllowedValue>ClassesRoot</AllowedValue>
+							<AllowedValue>CurrentUser</AllowedValue>
+							<AllowedValue>LocalMachine</AllowedValue>
+							<AllowedValue>Users</AllowedValue>
+							<AllowedValue>CurrentConfig</AllowedValue>
+						</EnumConstraint>
+					</Constraints>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="Value" Type="System.Object">
+					<Description>Retrieved registry value</Description>
+				</Parameter>
+				<Parameter Name="ValueKind" Type="System.String">
+					<Description>Type of the registry value (String, DWord, QWord, etc.)</Description>
+				</Parameter>
+				<Parameter Name="Exists" Type="System.Boolean">
+					<Description>Whether the registry key/value exists</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="RequireElevation" Value="true" Type="System.Boolean">
+					<Description>Require administrator privileges</Description>
+				</Property>
+				<Property Name="Wow64View" Value="Auto" Type="System.String">
+					<Description>32-bit or 64-bit registry view</Description>
+				</Property>
+				<Property Name="AuditAccess" Value="true" Type="System.Boolean">
+					<Description>Log registry access for auditing</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="1" />
+			<TimeoutPolicy ExecutionTimeout="00:00:30" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Security Team" />
+				<Item Key="Platform" Value="Windows" />
+				<Item Key="SecurityLevel" Value="Critical" />
+				<Item Key="RequiresElevation" Value="true" />
+			</Metadata>
+		</ActivityTemplate>
+
+	</Category>
+
+	<!-- Network Activities -->
+	<Category Name="Network" Description="Network and communication activities">
+
+		<ActivityTemplate Id="HttpRequest" Name="HTTP Request" Version="3.0.0">
+			<Description>Performs HTTP/HTTPS requests with advanced features like retry, timeout, and authentication</Description>
+			<Category>Network/HTTP</Category>
+			<Tags>
+				<Tag>HTTP</Tag>
+				<Tag>REST</Tag>
+				<Tag>API</Tag>
+				<Tag>Web</Tag>
+				<Tag>Network</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="Url" Type="System.String" IsRequired="true">
+					<Description>The URL to send the request to</Description>
+					<Constraints>
+						<RegexConstraint Pattern="^https?://.+" Message="Must be a valid HTTP/HTTPS URL" />
+					</Constraints>
+				</Parameter>
+				<Parameter Name="Method" Type="System.String" IsRequired="false" DefaultValue="GET">
+					<Description>HTTP method (GET, POST, PUT, DELETE, PATCH, etc.)</Description>
+					<Constraints>
+						<EnumConstraint>
+							<AllowedValue>GET</AllowedValue>
+							<AllowedValue>POST</AllowedValue>
+							<AllowedValue>PUT</AllowedValue>
+							<AllowedValue>DELETE</AllowedValue>
+							<AllowedValue>PATCH</AllowedValue>
+							<AllowedValue>HEAD</AllowedValue>
+							<AllowedValue>OPTIONS</AllowedValue>
+						</EnumConstraint>
+					</Constraints>
+				</Parameter>
+				<Parameter Name="Headers" Type="System.Collections.Generic.Dictionary&lt;System.String,System.String&gt;" IsRequired="false">
+					<Description>HTTP headers to include in the request</Description>
+				</Parameter>
+				<Parameter Name="Body" Type="System.Object" IsRequired="false">
+					<Description>Request body (automatically serialized based on Content-Type)</Description>
+				</Parameter>
+				<Parameter Name="ContentType" Type="System.String" IsRequired="false" DefaultValue="application/json">
+					<Description>Content-Type header value</Description>
+				</Parameter>
+				<Parameter Name="Authentication" Type="System.Collections.Generic.Dictionary&lt;System.String,System.String&gt;" IsRequired="false">
+					<Description>Authentication credentials and type</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="StatusCode" Type="System.Int32">
+					<Description>HTTP status code of the response</Description>
+				</Parameter>
+				<Parameter Name="ResponseBody" Type="System.String">
+					<Description>Response body as string</Description>
+				</Parameter>
+				<Parameter Name="ResponseHeaders" Type="System.Collections.Generic.Dictionary&lt;System.String,System.String&gt;">
+					<Description>Response headers</Description>
+				</Parameter>
+				<Parameter Name="ResponseTime" Type="System.Double">
+					<Description>Total response time in milliseconds</Description>
+				</Parameter>
+				<Parameter Name="Success" Type="System.Boolean">
+					<Description>Whether the request was successful (2xx status code)</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="TimeoutSeconds" Value="30" Type="System.Int32">
+					<Description>Request timeout in seconds</Description>
+				</Property>
+				<Property Name="MaxRetries" Value="3" Type="System.Int32">
+					<Description>Maximum number of retry attempts</Description>
+				</Property>
+				<Property Name="FollowRedirects" Value="true" Type="System.Boolean">
+					<Description>Follow HTTP redirects</Description>
+				</Property>
+				<Property Name="ValidateCertificate" Value="true" Type="System.Boolean">
+					<Description>Validate SSL/TLS certificates</Description>
+				</Property>
+				<Property Name="UseCompression" Value="true" Type="System.Boolean">
+					<Description>Use compression (gzip/deflate)</Description>
+				</Property>
+				<Property Name="ProxyUrl" Value="" Type="System.String">
+					<Description>Proxy server URL (optional)</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="3" InitialDelay="00:00:01" BackoffMultiplier="2.0" />
+			<TimeoutPolicy ExecutionTimeout="00:01:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Web Team" />
+				<Item Key="PerformanceImpact" Value="Medium" />
+				<Item Key="SecurityLevel" Value="High" />
+				<Item Key="SupportsAsync" Value="true" />
+				<Item Key="Protocols" Value="HTTP/1.1, HTTP/2, HTTPS" />
+			</Metadata>
+		</ActivityTemplate>
+
+		<ActivityTemplate Id="WebSocketConnect" Name="WebSocket Connection" Version="2.0.0">
+			<Description>Establishes and manages WebSocket connections with message handling</Description>
+			<Category>Network/WebSocket</Category>
+			<Tags>
+				<Tag>WebSocket</Tag>
+				<Tag>RealTime</Tag>
+				<Tag>Communication</Tag>
+				<Tag>Network</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="WebSocketUrl" Type="System.String" IsRequired="true">
+					<Description>WebSocket server URL (ws:// or wss://)</Description>
+				</Parameter>
+				<Parameter Name="Protocols" Type="System.String[]" IsRequired="false">
+					<Description>WebSocket sub-protocols to negotiate</Description>
+				</Parameter>
+				<Parameter Name="Headers" Type="System.Collections.Generic.Dictionary&lt;System.String,System.String&gt;" IsRequired="false">
+					<Description>Custom HTTP headers for handshake</Description>
+				</Parameter>
+				<Parameter Name="AutoReconnect" Type="System.Boolean" IsRequired="false" DefaultValue="true">
+					<Description>Automatically reconnect on disconnect</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="ConnectionId" Type="System.Guid">
+					<Description>Unique identifier for this connection</Description>
+				</Parameter>
+				<Parameter Name="IsConnected" Type="System.Boolean">
+					<Description>Current connection status</Description>
+				</Parameter>
+				<Parameter Name="MessagesReceived" Type="System.Int32">
+					<Description>Number of messages received</Description>
+				</Parameter>
+				<Parameter Name="MessagesSent" Type="System.Int32">
+					<Description>Number of messages sent</Description>
+				</Parameter>
+				<Parameter Name="ConnectionTime" Type="System.Double">
+					<Description>Connection duration in milliseconds</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="KeepAliveInterval" Value="30" Type="System.Int32">
+					<Description>Keep-alive ping interval in seconds</Description>
+				</Property>
+				<Property Name="ReceiveBufferSize" Value="4096" Type="System.Int32">
+					<Description>Receive buffer size in bytes</Description>
+				</Property>
+				<Property Name="MaxMessageSize" Value="65536" Type="System.Int32">
+					<Description>Maximum message size in bytes</Description>
+				</Property>
+				<Property Name="HandshakeTimeout" Value="10" Type="System.Int32">
+					<Description>Handshake timeout in seconds</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="5" InitialDelay="00:00:02" BackoffMultiplier="1.5" />
+			<TimeoutPolicy ExecutionTimeout="00:05:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA RealTime Team" />
+				<Item Key="PerformanceImpact" Value="High" />
+				<Item Key="SecurityLevel" Value="Medium" />
+				<Item Key="RequiresPersistentConnection" Value="true" />
+			</Metadata>
+		</ActivityTemplate>
+
+	</Category>
+
+	<!-- Data Processing Activities -->
+	<Category Name="Data" Description="Data transformation and processing activities">
+
+		<ActivityTemplate Id="DataTransform" Name="Data Transformation" Version="2.5.0">
+			<Description>Transforms data using configurable mapping rules and transformations</Description>
+			<Category>Data/Transformation</Category>
+			<Tags>
+				<Tag>Data</Tag>
+				<Tag>Transformation</Tag>
+				<Tag>Mapping</Tag>
+				<Tag>Processing</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="InputData" Type="System.Object" IsRequired="true">
+					<Description>Input data to transform (object, dictionary, list, etc.)</Description>
+				</Parameter>
+				<Parameter Name="TransformationRules" Type="System.Collections.Generic.Dictionary&lt;System.String,System.String&gt;" IsRequired="true">
+					<Description>Mapping rules for transformation (input field -> output field)</Description>
+				</Parameter>
+				<Parameter Name="TransformationType" Type="System.String" IsRequired="false" DefaultValue="Mapping">
+					<Description>Type of transformation to apply</Description>
+					<Constraints>
+						<EnumConstraint>
+							<AllowedValue>Mapping</AllowedValue>
+							<AllowedValue>Aggregation</AllowedValue>
+							<AllowedValue>Filtering</AllowedValue>
+							<AllowedValue>Sorting</AllowedValue>
+							<AllowedValue>Grouping</AllowedValue>
+						</EnumConstraint>
+					</Constraints>
+				</Parameter>
+				<Parameter Name="CustomScript" Type="System.String" IsRequired="false">
+					<Description>Custom transformation script (C# expression)</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="TransformedData" Type="System.Object">
+					<Description>The transformed output data</Description>
+				</Parameter>
+				<Parameter Name="TransformationMetrics" Type="System.Collections.Generic.Dictionary&lt;System.String,System.Object&gt;">
+					<Description>Metrics about the transformation process</Description>
+				</Parameter>
+				<Parameter Name="ProcessingTime" Type="System.Double">
+					<Description>Time taken for transformation in milliseconds</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="MaxInputSize" Value="104857600" Type="System.Int32">
+					<Description>Maximum input size in bytes (100MB)</Description>
+				</Property>
+				<Property Name="ParallelProcessing" Value="true" Type="System.Boolean">
+					<Description>Use parallel processing for large datasets</Description>
+				</Property>
+				<Property Name="CacheTransformation" Value="true" Type="System.Boolean">
+					<Description>Cache transformation results for performance</Description>
+				</Property>
+				<Property Name="ValidationMode" Value="Strict" Type="System.String">
+					<Description>Validation strictness (None, Relaxed, Strict)</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="1" />
+			<TimeoutPolicy ExecutionTimeout="00:10:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Data Team" />
+				<Item Key="PerformanceImpact" Value="Variable" />
+				<Item Key="SecurityLevel" Value="Medium" />
+				<Item Key="SupportsLargeData" Value="true" />
+			</Metadata>
+		</ActivityTemplate>
+
+		<ActivityTemplate Id="DataValidation" Name="Data Validation" Version="2.0.0">
+			<Description>Validates data against schema, rules, and constraints</Description>
+			<Category>Data/Validation</Category>
+			<Tags>
+				<Tag>Data</Tag>
+				<Tag>Validation</Tag>
+				<Tag>Quality</Tag>
+				<Tag>Processing</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="Data" Type="System.Object" IsRequired="true">
+					<Description>Data to validate</Description>
+				</Parameter>
+				<Parameter Name="ValidationSchema" Type="System.String" IsRequired="false">
+					<Description>JSON Schema or validation rules definition</Description>
+				</Parameter>
+				<Parameter Name="ValidationRules" Type="System.Collections.Generic.List&lt;System.String&gt;" IsRequired="false">
+					<Description>List of validation rules to apply</Description>
+				</Parameter>
+				<Parameter Name="StrictMode" Type="System.Boolean" IsRequired="false" DefaultValue="true">
+					<Description>Stop on first error or collect all errors</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="IsValid" Type="System.Boolean">
+					<Description>Overall validation result</Description>
+				</Parameter>
+				<Parameter Name="ValidationErrors" Type="System.Collections.Generic.List&lt;System.String&gt;">
+					<Description>List of validation errors (if any)</Description>
+				</Parameter>
+				<Parameter Name="ValidationWarnings" Type="System.Collections.Generic.List&lt;System.String&gt;">
+					<Description>List of validation warnings (if any)</Description>
+				</Parameter>
+				<Parameter Name="ValidationReport" Type="System.String">
+					<Description>Detailed validation report</Description>
+				</Parameter>
+				<Parameter Name="ValidatedData" Type="System.Object">
+					<Description>Validated (and possibly cleaned) data</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="AutoClean" Value="false" Type="System.Boolean">
+					<Description>Automatically clean data when possible</Description>
+				</Property>
+				<Property Name="MaxErrors" Value="100" Type="System.Int32">
+					<Description>Maximum number of errors to collect</Description>
+				</Property>
+				<Property Name="SchemaCache" Value="true" Type="System.Boolean">
+					<Description>Cache validation schemas for performance</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="0" />
+			<TimeoutPolicy ExecutionTimeout="00:05:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Quality Team" />
+				<Item Key="PerformanceImpact" Value="Low" />
+				<Item Key="SecurityLevel" Value="Low" />
+				<Item Key="DataQuality" Value="true" />
+			</Metadata>
+		</ActivityTemplate>
+
+	</Category>
+
+	<!-- AI/ML Activities -->
+	<Category Name="AI" Description="Artificial Intelligence and Machine Learning activities">
+
+		<ActivityTemplate Id="AIModelInference" Name="AI Model Inference" Version="1.8.0">
+			<Description>Runs inference using trained AI/ML models with GPU acceleration support</Description>
+			<Category>AI/Inference</Category>
+			<Tags>
+				<Tag>AI</Tag>
+				<Tag>ML</Tag>
+				<Tag>Inference</Tag>
+				<Tag>Model</Tag>
+				<Tag>NeuralNetwork</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="ModelPath" Type="System.String" IsRequired="true">
+					<Description>Path to the trained model file</Description>
+				</Parameter>
+				<Parameter Name="InputData" Type="System.Object" IsRequired="true">
+					<Description>Input data for inference (tensor, array, or object)</Description>
+				</Parameter>
+				<Parameter Name="ModelType" Type="System.String" IsRequired="false" DefaultValue="ONNX">
+					<Description>Type of model format</Description>
+					<Constraints>
+						<EnumConstraint>
+							<AllowedValue>ONNX</AllowedValue>
+							<AllowedValue>TensorFlow</AllowedValue>
+							<AllowedValue>PyTorch</AllowedValue>
+							<AllowedValue>ML.NET</AllowedValue>
+							<AllowedValue>Custom</AllowedValue>
+						</EnumConstraint>
+					</Constraints>
+				</Parameter>
+				<Parameter Name="Device" Type="System.String" IsRequired="false" DefaultValue="Auto">
+					<Description>Computation device (CPU, GPU, Auto)</Description>
+				</Parameter>
+				<Parameter Name="BatchSize" Type="System.Int32" IsRequired="false" DefaultValue="1">
+					<Description>Batch size for inference</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="Predictions" Type="System.Object">
+					<Description>Model predictions/output</Description>
+				</Parameter>
+				<Parameter Name="ConfidenceScores" Type="System.Double[]">
+					<Description>Confidence scores for predictions</Description>
+				</Parameter>
+				<Parameter Name="InferenceTime" Type="System.Double">
+					<Description>Time taken for inference in milliseconds</Description>
+				</Parameter>
+				<Parameter Name="DeviceUsed" Type="System.String">
+					<Description>Actual device used for computation</Description>
+				</Parameter>
+				<Parameter Name="MemoryUsage" Type="System.Double">
+					<Description>Memory usage in MB during inference</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="UseGPU" Value="true" Type="System.Boolean">
+					<Description>Enable GPU acceleration if available</Description>
+				</Property>
+				<Property Name="GPUIndex" Value="0" Type="System.Int32">
+					<Description>GPU device index to use</Description>
+				</Property>
+				<Property Name="Precision" Value="Float32" Type="System.String">
+					<Description>Computation precision (Float16, Float32, Float64)</Description>
+				</Property>
+				<Property Name="WarmupIterations" Value="10" Type="System.Int32">
+					<Description>Number of warmup iterations before timing</Description>
+				</Property>
+				<Property Name="ModelCache" Value="true" Type="System.Boolean">
+					<Description>Cache loaded models for performance</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="2" InitialDelay="00:00:01" />
+			<TimeoutPolicy ExecutionTimeout="00:02:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA AI Team" />
+				<Item Key="PerformanceImpact" Value="High" />
+				<Item Key="SecurityLevel" Value="Medium" />
+				<Item Key="RequiresHardwareAcceleration" Value="optional" />
+				<Item Key="Framework" Value="ONNX Runtime, TensorFlow, PyTorch" />
+			</Metadata>
+		</ActivityTemplate>
+
+		<ActivityTemplate Id="TextAnalysis" Name="Text Analysis" Version="2.2.0">
+			<Description>Performs NLP text analysis including sentiment, entities, and key phrases</Description>
+			<Category>AI/NLP</Category>
+			<Tags>
+				<Tag>AI</Tag>
+				<Tag>NLP</Tag>
+				<Tag>Text</Tag>
+				<Tag>Analysis</Tag>
+				<Tag>Sentiment</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="Text" Type="System.String" IsRequired="true">
+					<Description>Text to analyze</Description>
+				</Parameter>
+				<Parameter Name="AnalysisTypes" Type="System.String[]" IsRequired="false">
+					<Description>Types of analysis to perform</Description>
+					<Constraints>
+						<EnumConstraint>
+							<AllowedValue>Sentiment</AllowedValue>
+							<AllowedValue>Entities</AllowedValue>
+							<AllowedValue>KeyPhrases</AllowedValue>
+							<AllowedValue>Language</AllowedValue>
+							<AllowedValue>Topics</AllowedValue>
+							<AllowedValue>Syntax</AllowedValue>
+						</EnumConstraint>
+					</Constraints>
+				</Parameter>
+				<Parameter Name="Language" Type="System.String" IsRequired="false" DefaultValue="Auto">
+					<Description>Language of the text (Auto for detection)</Description>
+				</Parameter>
+				<Parameter Name="CustomModel" Type="System.String" IsRequired="false">
+					<Description>Path to custom NLP model</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="SentimentScore" Type="System.Double">
+					<Description>Sentiment score from -1 (negative) to 1 (positive)</Description>
+				</Parameter>
+				<Parameter Name="DetectedLanguage" Type="System.String">
+					<Description>Detected language code</Description>
+				</Parameter>
+				<Parameter Name="KeyPhrases" Type="System.String[]">
+					<Description>Extracted key phrases</Description>
+				</Parameter>
+				<Parameter Name="Entities" Type="System.Collections.Generic.List&lt;System.Collections.Generic.Dictionary&lt;System.String,System.Object&gt;&gt;">
+					<Description>Named entities found in text</Description>
+				</Parameter>
+				<Parameter Name="AnalysisTime" Type="System.Double">
+					<Description>Time taken for analysis in milliseconds</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="UseDeepAnalysis" Value="true" Type="System.Boolean">
+					<Description>Use deep neural networks for more accurate analysis</Description>
+				</Property>
+				<Property Name="BatchProcessing" Value="true" Type="System.Boolean">
+					<Description>Process multiple texts in batches</Description>
+				</Property>
+				<Property Name="ConfidenceThreshold" Value="0.7" Type="System.Double">
+					<Description>Minimum confidence for entity detection</Description>
+				</Property>
+				<Property Name="MaxTextLength" Value="5000" Type="System.Int32">
+					<Description>Maximum text length in characters</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="1" />
+			<TimeoutPolicy ExecutionTimeout="00:01:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA NLP Team" />
+				<Item Key="PerformanceImpact" Value="Medium" />
+				<Item Key="SecurityLevel" Value="Low" />
+				<Item Key="SupportsMultipleLanguages" Value="true" />
+				<Item Key="NLPEngine" Value="BERT, GPT, Custom" />
+			</Metadata>
+		</ActivityTemplate>
+
+	</Category>
+
+	<!-- Security Activities -->
+	<Category Name="Security" Description="Security and encryption activities">
+
+		<ActivityTemplate Id="EncryptData" Name="Encrypt Data" Version="2.3.0">
+			<Description>Encrypts data using various algorithms with key management</Description>
+			<Category>Security/Encryption</Category>
+			<Tags>
+				<Tag>Security</Tag>
+				<Tag>Encryption</Tag>
+				<Tag>Crypto</Tag>
+				<Tag>Protection</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="PlainText" Type="System.Object" IsRequired="true">
+					<Description>Data to encrypt (string, byte array, or serializable object)</Description>
+				</Parameter>
+				<Parameter Name="Algorithm" Type="System.String" IsRequired="false" DefaultValue="AES-256">
+					<Description>Encryption algorithm to use</Description>
+					<Constraints>
+						<EnumConstraint>
+							<AllowedValue>AES-128</AllowedValue>
+							<AllowedValue>AES-192</AllowedValue>
+							<AllowedValue>AES-256</AllowedValue>
+							<AllowedValue>RSA</AllowedValue>
+							<AllowedValue>ChaCha20</AllowedValue>
+							<AllowedValue>TripleDES</AllowedValue>
+						</EnumConstraint>
+					</Constraints>
+				</Parameter>
+				<Parameter Name="Key" Type="System.String" IsRequired="false">
+					<Description>Encryption key (leave empty for auto-generation)</Description>
+				</Parameter>
+				<Parameter Name="IV" Type="System.String" IsRequired="false">
+					<Description>Initialization vector (leave empty for auto-generation)</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="CipherText" Type="System.Byte[]">
+					<Description>Encrypted data as byte array</Description>
+				</Parameter>
+				<Parameter Name="EncryptionKey" Type="System.String">
+					<Description>Encryption key used (base64 encoded)</Description>
+				</Parameter>
+				<Parameter Name="InitializationVector" Type="System.String">
+					<Description>IV used (base64 encoded)</Description>
+				</Parameter>
+				<Parameter Name="EncryptionTime" Type="System.Double">
+					<Description>Time taken for encryption in milliseconds</Description>
+				</Parameter>
+				<Parameter Name="AlgorithmUsed" Type="System.String">
+					<Description>Actual algorithm used</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="KeySize" Value="256" Type="System.Int32">
+					<Description>Key size in bits</Description>
+				</Property>
+				<Property Name="BlockMode" Value="CBC" Type="System.String">
+					<Description>Block cipher mode (CBC, ECB, GCM, etc.)</Description>
+				</Property>
+				<Property Name="Padding" Value="PKCS7" Type="System.String">
+					<Description>Padding mode</Description>
+				</Property>
+				<Property Name="StoreKeyInVault" Value="true" Type="System.Boolean">
+					<Description>Store encryption key in secure vault</Description>
+				</Property>
+				<Property Name="AddIntegrityCheck" Value="true" Type="System.Boolean">
+					<Description>Add integrity check (HMAC)</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="1" />
+			<TimeoutPolicy ExecutionTimeout="00:00:30" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Security Team" />
+				<Item Key="PerformanceImpact" Value="Low" />
+				<Item Key="SecurityLevel" Value="Critical" />
+				<Item Key="FIPSCompliant" Value="true" />
+				<Item Key="Certification" Value="NIST, FIPS 140-2" />
+			</Metadata>
+		</ActivityTemplate>
+
+		<ActivityTemplate Id="AuthenticateUser" Name="User Authentication" Version="2.1.0">
+			<Description>Authenticates users with multiple factor support and session management</Description>
+			<Category>Security/Authentication</Category>
+			<Tags>
+				<Tag>Security</Tag>
+				<Tag>Authentication</Tag>
+				<Tag>User</Tag>
+				<Tag>Login</Tag>
+				<Tag>MFA</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="Username" Type="System.String" IsRequired="true">
+					<Description>Username or email address</Description>
+				</Parameter>
+				<Parameter Name="Password" Type="System.String" IsRequired="true">
+					<Description>User password</Description>
+				</Parameter>
+				<Parameter Name="AuthenticationMethod" Type="System.String" IsRequired="false" DefaultValue="Password">
+					<Description>Primary authentication method</Description>
+					<Constraints>
+						<EnumConstraint>
+							<AllowedValue>Password</AllowedValue>
+							<AllowedValue>Windows</AllowedValue>
+							<AllowedValue>Certificate</AllowedValue>
+							<AllowedValue>Biometric</AllowedValue>
+							<AllowedValue>SSO</AllowedValue>
+						</EnumConstraint>
+					</Constraints>
+				</Parameter>
+				<Parameter Name="SecondFactor" Type="System.String" IsRequired="false">
+					<Description>Second factor authentication code (for MFA)</Description>
+				</Parameter>
+				<Parameter Name="ClientInfo" Type="System.Collections.Generic.Dictionary&lt;System.String,System.String&gt;" IsRequired="false">
+					<Description>Client information (IP, User-Agent, etc.)</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="IsAuthenticated" Type="System.Boolean">
+					<Description>Authentication success/failure</Description>
+				</Parameter>
+				<Parameter Name="SessionToken" Type="System.String">
+					<Description>Session token for authenticated user</Description>
+				</Parameter>
+				<Parameter Name="UserInfo" Type="System.Collections.Generic.Dictionary&lt;System.String,System.Object&gt;">
+					<Description>User profile information</Description>
+				</Parameter>
+				<Parameter Name="AuthenticationTime" Type="System.Double">
+					<Description>Time taken for authentication in milliseconds</Description>
+				</Parameter>
+				<Parameter Name="RequiresSecondFactor" Type="System.Boolean">
+					<Description>Whether second factor is required</Description>
+				</Parameter>
+				<Parameter Name="FailureReason" Type="System.String">
+					<Description>Reason for authentication failure (if any)</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="MaxFailedAttempts" Value="5" Type="System.Int32">
+					<Description>Maximum failed attempts before lockout</Description>
+				</Property>
+				<Property Name="LockoutDuration" Value="15" Type="System.Int32">
+					<Description>Lockout duration in minutes</Description>
+				</Property>
+				<Property Name="SessionTimeout" Value="30" Type="System.Int32">
+					<Description>Session timeout in minutes</Description>
+				</Property>
+				<Property Name="RequireMFA" Value="true" Type="System.Boolean">
+					<Description>Require multi-factor authentication</Description>
+				</Property>
+				<Property Name="AuditLogging" Value="true" Type="System.Boolean">
+					<Description>Log all authentication attempts</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="0" />
+			<TimeoutPolicy ExecutionTimeout="00:00:30" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Security Team" />
+				<Item Key="PerformanceImpact" Value="Low" />
+				<Item Key="SecurityLevel" Value="Critical" />
+				<Item Key="Compliance" Value="GDPR, HIPAA, PCI-DSS" />
+				<Item Key="SupportsMFA" Value="true" />
+			</Metadata>
+		</ActivityTemplate>
+
+	</Category>
+
+	<!-- Workflow Control Activities -->
+	<Category Name="Workflow" Description="Workflow control and orchestration activities">
+
+		<ActivityTemplate Id="ConditionalBranch" Name="Conditional Branch" Version="1.5.0">
+			<Description>Evaluates conditions and branches workflow execution accordingly</Description>
+			<Category>Workflow/Control</Category>
+			<Tags>
+				<Tag>Workflow</Tag>
+				<Tag>Control</Tag>
+				<Tag>Branch</Tag>
+				<Tag>Condition</Tag>
+				<Tag>Logic</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="Condition" Type="System.String" IsRequired="true">
+					<Description>Condition expression to evaluate (C# syntax)</Description>
+				</Parameter>
+				<Parameter Name="ContextData" Type="System.Collections.Generic.Dictionary&lt;System.String,System.Object&gt;" IsRequired="false">
+					<Description>Context data available for condition evaluation</Description>
+				</Parameter>
+				<Parameter Name="CaseSensitive" Type="System.Boolean" IsRequired="false" DefaultValue="true">
+					<Description>Whether string comparisons are case-sensitive</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="ConditionResult" Type="System.Boolean">
+					<Description>Result of the condition evaluation</Description>
+				</Parameter>
+				<Parameter Name="EvaluationTime" Type="System.Double">
+					<Description>Time taken for evaluation in milliseconds</Description>
+				</Parameter>
+				<Parameter Name="ErrorMessage" Type="System.String">
+					<Description>Error message if evaluation fails</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="MaxExpressionLength" Value="1000" Type="System.Int32">
+					<Description>Maximum length of condition expression</Description>
+				</Property>
+				<Property Name="AllowExternalTypes" Value="false" Type="System.Boolean">
+					<Description>Allow external .NET types in expressions</Description>
+				</Property>
+				<Property Name="TimeoutMilliseconds" Value="1000" Type="System.Int32">
+					<Description>Maximum time for expression evaluation</Description>
+				</Property>
+				<Property Name="CacheExpressions" Value="true" Type="System.Boolean">
+					<Description>Cache compiled expressions for performance</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="0" />
+			<TimeoutPolicy ExecutionTimeout="00:00:05" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Workflow Team" />
+				<Item Key="PerformanceImpact" Value="Low" />
+				<Item Key="SecurityLevel" Value="Medium" />
+				<Item Key="SandboxedExecution" Value="true" />
+			</Metadata>
+		</ActivityTemplate>
+
+		<ActivityTemplate Id="ParallelExecution" Name="Parallel Execution" Version="2.0.0">
+			<Description>Executes multiple activities in parallel with synchronization</Description>
+			<Category>Workflow/Control</Category>
+			<Tags>
+				<Tag>Workflow</Tag>
+				<Tag>Parallel</Tag>
+				<Tag>Concurrent</Tag>
+				<Tag>Synchronization</Tag>
+				<Tag>Performance</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="Activities" Type="System.Collections.Generic.List&lt;System.String&gt;" IsRequired="true">
+					<Description>List of activity IDs to execute in parallel</Description>
+				</Parameter>
+				<Parameter Name="MaxConcurrency" Type="System.Int32" IsRequired="false" DefaultValue="4">
+					<Description>Maximum number of concurrent executions</Description>
+					<Constraints>
+						<RangeConstraint MinValue="1" MaxValue="64" Message="Concurrency must be between 1 and 64" />
+					</Constraints>
+				</Parameter>
+				<Parameter Name="WaitForAll" Type="System.Boolean" IsRequired="false" DefaultValue="true">
+					<Description>Wait for all activities to complete before continuing</Description>
+				</Parameter>
+				<Parameter Name="FailOnFirstError" Type="System.Boolean" IsRequired="false" DefaultValue="false">
+					<Description>Fail immediately if any activity fails</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="CompletedActivities" Type="System.Int32">
+					<Description>Number of activities completed successfully</Description>
+				</Parameter>
+				<Parameter Name="FailedActivities" Type="System.Int32">
+					<Description>Number of activities that failed</Description>
+				</Parameter>
+				<Parameter Name="TotalExecutionTime" Type="System.Double">
+					<Description>Total time taken for parallel execution in milliseconds</Description>
+				</Parameter>
+				<Parameter Name="Results" Type="System.Collections.Generic.Dictionary&lt;System.String,System.Object&gt;">
+					<Description>Results from each activity</Description>
+				</Parameter>
+				<Parameter Name="ParallelEfficiency" Type="System.Double">
+					<Description>Parallel execution efficiency (0-1)</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="TaskScheduler" Value="Default" Type="System.String">
+					<Description>Task scheduler to use (Default, ThreadPool, Custom)</Description>
+				</Property>
+				<Property Name="CancellationTimeout" Value="30" Type="System.Int32">
+					<Description>Timeout for cancellation in seconds</Description>
+				</Property>
+				<Property Name="ResourceLimits" Value="" Type="System.String">
+					<Description>Resource limits for parallel execution</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="0" />
+			<TimeoutPolicy ExecutionTimeout="01:00:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Performance Team" />
+				<Item Key="PerformanceImpact" Value="High" />
+				<Item Key="SecurityLevel" Value="Low" />
+				<Item Key="ConcurrentExecution" Value="true" />
+				<Item Key="ResourceIntensive" Value="true" />
+			</Metadata>
+		</ActivityTemplate>
+
+		<ActivityTemplate Id="ErrorHandler" Name="Error Handler" Version="1.8.0">
+			<Description>Handles errors and exceptions in workflow execution with recovery strategies</Description>
+			<Category>Workflow/Control</Category>
+			<Tags>
+				<Tag>Workflow</Tag>
+				<Tag>Error</Tag>
+				<Tag>Exception</Tag>
+				<Tag>Recovery</Tag>
+				<Tag>Handling</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="Error" Type="System.Exception" IsRequired="true">
+					<Description>The exception to handle</Description>
+				</Parameter>
+				<Parameter Name="Context" Type="System.Collections.Generic.Dictionary&lt;System.String,System.Object&gt;" IsRequired="false">
+					<Description>Execution context at the time of error</Description>
+				</Parameter>
+				<Parameter Name="RecoveryStrategy" Type="System.String" IsRequired="false" DefaultValue="Retry">
+					<Description>Strategy for handling the error</Description>
+					<Constraints>
+						<EnumConstraint>
+							<AllowedValue>Retry</AllowedValue>
+							<AllowedValue>Continue</AllowedValue>
+							<AllowedValue>Compensate</AllowedValue>
+							<AllowedValue>Escalate</AllowedValue>
+							<AllowedValue>Terminate</AllowedValue>
+						</EnumConstraint>
+					</Constraints>
+				</Parameter>
+				<Parameter Name="MaxRetries" Type="System.Int32" IsRequired="false" DefaultValue="3">
+					<Description>Maximum retry attempts (for Retry strategy)</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="Handled" Type="System.Boolean">
+					<Description>Whether the error was successfully handled</Description>
+				</Parameter>
+				<Parameter Name="RecoveryAction" Type="System.String">
+					<Description>Action taken to handle the error</Description>
+				</Parameter>
+				<Parameter Name="NextStep" Type="System.String">
+					<Description>Next step in workflow execution</Description>
+				</Parameter>
+				<Parameter Name="ErrorDetails" Type="System.Collections.Generic.Dictionary&lt;System.String,System.Object&gt;">
+					<Description>Detailed error information</Description>
+				</Parameter>
+				<Parameter Name="RecoveryTime" Type="System.Double">
+					<Description>Time taken for error recovery in milliseconds</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="LogErrors" Value="true" Type="System.Boolean">
+					<Description>Log all errors for analysis</Description>
+				</Property>
+				<Property Name="NotifyOnCritical" Value="true" Type="System.Boolean">
+					<Description>Send notifications for critical errors</Description>
+				</Property>
+				<Property Name="AutoDiagnose" Value="true" Type="System.Boolean">
+					<Description>Automatically diagnose error causes</Description>
+				</Property>
+				<Property Name="RecoveryHistory" Value="100" Type="System.Int32">
+					<Description>Number of recovery attempts to remember</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="0" />
+			<TimeoutPolicy ExecutionTimeout="00:01:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Reliability Team" />
+				<Item Key="PerformanceImpact" Value="Low" />
+				<Item Key="SecurityLevel" Value="Medium" />
+				<Item Key="FaultTolerant" Value="true" />
+				<Item Key="RecoveryStrategies" Value="Multiple" />
+			</Metadata>
+		</ActivityTemplate>
+
+	</Category>
+
+	<!-- Database Activities -->
+	<Category Name="Database" Description="Database access and manipulation activities">
+
+		<ActivityTemplate Id="DatabaseQuery" Name="Database Query" Version="2.5.0">
+			<Description>Executes database queries with parameterization and result mapping</Description>
+			<Category>Database/SQL</Category>
+			<Tags>
+				<Tag>Database</Tag>
+				<Tag>SQL</Tag>
+				<Tag>Query</Tag>
+				<Tag>Data</Tag>
+				<Tag>CRUD</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="ConnectionString" Type="System.String" IsRequired="true">
+					<Description>Database connection string</Description>
+				</Parameter>
+				<Parameter Name="Query" Type="System.String" IsRequired="true">
+					<Description>SQL query to execute</Description>
+				</Parameter>
+				<Parameter Name="Parameters" Type="System.Collections.Generic.Dictionary&lt;System.String,System.Object&gt;" IsRequired="false">
+					<Description>Query parameters for parameterized queries</Description>
+				</Parameter>
+				<Parameter Name="CommandType" Type="System.String" IsRequired="false" DefaultValue="Text">
+					<Description>Command type (Text, StoredProcedure, TableDirect)</Description>
+				</Parameter>
+				<Parameter Name="TransactionRequired" Type="System.Boolean" IsRequired="false" DefaultValue="false">
+					<Description>Whether to use a transaction</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="Results" Type="System.Object">
+					<Description>Query results (DataTable, List, or scalar)</Description>
+				</Parameter>
+				<Parameter Name="RowCount" Type="System.Int32">
+					<Description>Number of rows affected or returned</Description>
+				</Parameter>
+				<Parameter Name="ExecutionTime" Type="System.Double">
+					<Description>Query execution time in milliseconds</Description>
+				</Parameter>
+				<Parameter Name="Success" Type="System.Boolean">
+					<Description>Whether the query executed successfully</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="CommandTimeout" Value="30" Type="System.Int32">
+					<Description>Command timeout in seconds</Description>
+				</Property>
+				<Property Name="ConnectionTimeout" Value="15" Type="System.Int32">
+					<Description>Connection timeout in seconds</Description>
+				</Property>
+				<Property Name="PoolConnections" Value="true" Type="System.Boolean">
+					<Description>Use connection pooling</Description>
+				</Property>
+				<Property Name="MaxRows" Value="10000" Type="System.Int32">
+					<Description>Maximum rows to return</Description>
+				</Property>
+				<Property Name="ParameterValidation" Value="true" Type="System.Boolean">
+					<Description>Validate query parameters for SQL injection</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="2" InitialDelay="00:00:01" />
+			<TimeoutPolicy ExecutionTimeout="00:05:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Database Team" />
+				<Item Key="PerformanceImpact" Value="Medium" />
+				<Item Key="SecurityLevel" Value="High" />
+				<Item Key="SupportsMultipleDatabases" Value="true" />
+				<Item Key="DatabaseProviders" Value="SQL Server, Oracle, PostgreSQL, MySQL, SQLite" />
+			</Metadata>
+		</ActivityTemplate>
+
+		<ActivityTemplate Id="DatabaseBulkInsert" Name="Bulk Database Insert" Version="1.9.0">
+			<Description>Performs high-performance bulk inserts into databases</Description>
+			<Category>Database/Bulk</Category>
+			<Tags>
+				<Tag>Database</Tag>
+				<Tag>Bulk</Tag>
+				<Tag>Insert</Tag>
+				<Tag>Performance</Tag>
+				<Tag>Data</Tag>
+			</Tags>
+
+			<InputParameters>
+				<Parameter Name="ConnectionString" Type="System.String" IsRequired="true">
+					<Description>Database connection string</Description>
+				</Parameter>
+				<Parameter Name="TableName" Type="System.String" IsRequired="true">
+					<Description>Target table name</Description>
+				</Parameter>
+				<Parameter Name="Data" Type="System.Collections.Generic.IEnumerable&lt;System.Collections.Generic.Dictionary&lt;System.String,System.Object&gt;&gt;" IsRequired="true">
+					<Description>Data to insert as dictionary collection</Description>
+				</Parameter>
+				<Parameter Name="BatchSize" Type="System.Int32" IsRequired="false" DefaultValue="1000">
+					<Description>Number of rows per batch</Description>
+				</Parameter>
+				<Parameter Name="CreateTable" Type="System.Boolean" IsRequired="false" DefaultValue="false">
+					<Description>Create table if it doesn't exist</Description>
+				</Parameter>
+				<Parameter Name="TruncateTable" Type="System.Boolean" IsRequired="false" DefaultValue="false">
+					<Description>Truncate table before insert</Description>
+				</Parameter>
+			</InputParameters>
+
+			<OutputParameters>
+				<Parameter Name="RowsInserted" Type="System.Int64">
+					<Description>Number of rows successfully inserted</Description>
+				</Parameter>
+				<Parameter Name="InsertTime" Type="System.Double">
+					<Description>Total insert time in milliseconds</Description>
+				</Parameter>
+				<Parameter Name="RowsPerSecond" Type="System.Double">
+					<Description>Insert rate in rows per second</Description>
+				</Parameter>
+				<Parameter Name="BatchCount" Type="System.Int32">
+					<Description>Number of batches processed</Description>
+				</Parameter>
+			</OutputParameters>
+
+			<Configuration>
+				<Property Name="UseBulkCopy" Value="true" Type="System.Boolean">
+					<Description>Use native bulk copy when available</Description>
+				</Property>
+				<Property Name="FireTriggers" Value="false" Type="System.Boolean">
+					<Description>Fire database triggers during insert</Description>
+				</Property>
+				<Property Name="KeepNulls" Value="true" Type="System.Boolean">
+					<Description>Keep null values in source data</Description>
+				</Property>
+				<Property Name="TableLock" Value="true" Type="System.Boolean">
+					<Description>Use table lock for faster inserts</Description>
+				</Property>
+				<Property Name="CheckConstraints" Value="true" Type="System.Boolean">
+					<Description>Check constraints during insert</Description>
+				</Property>
+			</Configuration>
+
+			<RetryPolicy MaxRetries="1" />
+			<TimeoutPolicy ExecutionTimeout="00:30:00" />
+
+			<Metadata>
+				<Item Key="Author" Value="NEDA Performance Team" />
+				<Item Key="PerformanceImpact" Value="High" />
+				<Item Key="">

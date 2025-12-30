@@ -1,0 +1,762 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DevelopmentConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                          xsi:noNamespaceSchemaLocation="DevConfig.xsd"
+                          Version="1.0"
+                          LastUpdated="2024-01-15T10:30:00Z">
+  
+  <!-- NEDA Development Environment Configuration -->
+  <!-- This file contains development-specific settings for the NEDA platform -->
+  
+  <EnvironmentInfo>
+    <Name>NEDA Development Environment</Name>
+    <Type>Development</Type>
+    <Version>1.0.0-dev</Version>
+    <Description>Local development environment for NEDA platform with full debugging capabilities</Description>
+    <TargetFramework>net8.0</TargetFramework>
+    <Platform>x64</Platform>
+    <CompatibilityMode>Windows</CompatibilityMode>
+  </EnvironmentInfo>
+
+  <BuildConfiguration>
+    <SolutionName>NEDA.sln</SolutionName>
+    <SolutionPath>C:\Projects\NEDA\Source</SolutionPath>
+    <OutputPath>C:\Projects\NEDA\Bin\Debug</OutputPath>
+    <IntermediateOutputPath>C:\Projects\NEDA\Obj\Debug</IntermediateOutputPath>
+    
+    <Projects>
+      <Project Name="NEDA.Core" Path="NEDA.Core\NEDA.Core.csproj" BuildOrder="1" />
+      <Project Name="NEDA.UI" Path="NEDA.UI\NEDA.UI.csproj" BuildOrder="2" />
+      <Project Name="NEDA.API" Path="NEDA.API\NEDA.API.csproj" BuildOrder="3" />
+      <Project Name="NEDA.Services" Path="NEDA.Services\NEDA.Services.csproj" BuildOrder="4" />
+      <Project Name="NEDA.Brain" Path="NEDA.Brain\NEDA.Brain.csproj" BuildOrder="5" />
+      <Project Name="NEDA.Automation" Path="NEDA.Automation\NEDA.Automation.csproj" BuildOrder="6" />
+    </Projects>
+    
+    <BuildSettings>
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+      <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+      <Optimize>false</Optimize>
+      <DebugType>full</DebugType>
+      <DebugSymbols>true</DebugSymbols>
+      <DefineConstants>DEBUG;TRACE;DEVELOPMENT</DefineConstants>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <Nullable>enable</Nullable>
+      <LangVersion>latest</LangVersion>
+      <NoWarn>1701;1702;1591</NoWarn>
+      <WarningsAsErrors />
+    </BuildSettings>
+    
+    <CodeAnalysis>
+      <Enabled>true</Enabled>
+      <Ruleset>C:\Projects\NEDA\Config\CodeAnalysis\Development.ruleset</Ruleset>
+      <Analyzers>
+        <Analyzer Assembly="Microsoft.CodeAnalysis.CSharp" />
+        <Analyzer Assembly="StyleCop.Analyzers" />
+        <Analyzer Assembly="SonarAnalyzer.CSharp" />
+      </Analyzers>
+    </CodeAnalysis>
+    
+    <Testing>
+      <TestFramework>xUnit</TestFramework>
+      <TestRunner>vstest</TestRunner>
+      <ParallelExecution>true</ParallelExecution>
+      <MaxParallelThreads>4</MaxParallelThreads>
+      <CodeCoverageEnabled>true</CodeCoverageEnabled>
+      <CoverageTool>coverlet</CoverageTool>
+      <CoverageThreshold>70</CoverageThreshold>
+      <TestResultsPath>C:\Projects\NEDA\TestResults</TestResultsPath>
+    </Testing>
+    
+    <Packaging>
+      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+      <PackageOutputPath>C:\Projects\NEDA\Packages</PackageOutputPath>
+      <IncludeSymbols>true</IncludeSymbols>
+      <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+      <PackageVersion>1.0.0-dev</PackageVersion>
+    </Packaging>
+  </BuildConfiguration>
+
+  <RuntimeConfiguration>
+    <ExecutionEnvironment>
+      <DotNetRuntime>
+        <Version>8.0.0</Version>
+        <RollForward>LatestMinor</RollForward>
+        <SelfContained>false</SelfContained>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <UseAppHost>true</UseAppHost>
+      </DotNetRuntime>
+      
+      <EnvironmentVariables>
+        <Variable Name="ASPNETCORE_ENVIRONMENT" Value="Development" />
+        <Variable Name="DOTNET_ENVIRONMENT" Value="Development" />
+        <Variable Name="ASPNETCORE_URLS" Value="https://localhost:5001;http://localhost:5000" />
+        <Variable Name="DOTNET_CLI_TELEMETRY_OPTOUT" Value="1" />
+        <Variable Name="DOTNET_SKIP_FIRST_TIME_EXPERIENCE" Value="1" />
+        <Variable Name="DOTNET_NOLOGO" Value="1" />
+        <Variable Name="NEDA_DEVELOPMENT_MODE" Value="true" />
+      </EnvironmentVariables>
+      
+      <GarbageCollection>
+        <ServerGC>true</ServerGC>
+        <ConcurrentGC>true</ConcurrentGC>
+        <RetainVM>false</RetainVM>
+        <LatencyMode>Interactive</LatencyMode>
+      </GarbageCollection>
+      
+      <ThreadPool>
+        <MinThreads>10</MinThreads>
+        <MaxThreads>32767</MaxThreads>
+        <CompletionPortThreads Enabled="true" Min="10" Max="1000" />
+      </ThreadPool>
+    </ExecutionEnvironment>
+    
+    <Hosting>
+      <Kestrel>
+        <Endpoints>
+          <Endpoint Name="Http" Url="http://localhost:5000" Protocol="Http" />
+          <Endpoint Name="Https" Url="https://localhost:5001" Protocol="Https">
+            <Certificate Path="C:\Projects\NEDA\Certificates\localhost.pfx" Password="dev-cert-password" />
+          </Endpoint>
+          <Endpoint Name="Grpc" Url="http://localhost:5002" Protocol="Http2" />
+        </Endpoints>
+        
+        <Limits>
+          <MaxRequestBodySize>10485760</MaxRequestBodySize>
+          <MaxRequestBufferSize>1048576</MaxRequestBufferSize>
+          <MaxRequestLineSize>8192</MaxRequestLineSize>
+          <MaxRequestHeadersTotalSize>32768</MaxRequestHeadersTotalSize>
+          <KeepAliveTimeout>120</KeepAliveTimeout>
+          <RequestHeadersTimeout>30</RequestHeadersTimeout>
+        </Limits>
+        
+        <AllowSynchronousIO>true</AllowSynchronousIO>
+        <DisableStringReuse>false</DisableStringReuse>
+      </Kestrel>
+      
+      <IISExpress>
+        <Enabled>true</Enabled>
+        <Port>44300</Port>
+        <SSLPort>44301</SSLPort>
+        <AnonymousAuthentication>true</AnonymousAuthentication>
+        <WindowsAuthentication>false</WindowsAuthentication>
+        <EnvironmentVariables>
+          <Variable Name="ASPNETCORE_ENVIRONMENT" Value="Development" />
+        </EnvironmentVariables>
+      </IISExpress>
+    </Hosting>
+    
+    <Debugging>
+      <Enabled>true</Enabled>
+      <DebuggerType>Mixed</DebuggerType>
+      <SymbolPaths>
+        <Path>C:\Projects\NEDA\Symbols</Path>
+        <Path>https://msdl.microsoft.com/download/symbols</Path>
+      </SymbolPaths>
+      <JustMyCode>false</JustMyCode>
+      <EnableDiagnostics>true</EnableDiagnostics>
+      <ExceptionSettings>
+        <BreakOnFirstChance>false</BreakOnFirstChance>
+        <BreakOnUnhandled>true</BreakOnUnhandled>
+        <Exceptions>
+          <Exception Type="System.NullReferenceException" Break="true" />
+          <Exception Type="System.ArgumentException" Break="true" />
+          <Exception Type="System.InvalidOperationException" Break="true" />
+        </Exceptions>
+      </ExceptionSettings>
+    </Debugging>
+  </RuntimeConfiguration>
+
+  <DatabaseConfiguration>
+    <Providers>
+      <SqlServer>
+        <Enabled>true</Enabled>
+        <ConnectionString>Server=(localdb)\mssqllocaldb;Database=NedaDevelopment;Trusted_Connection=True;MultipleActiveResultSets=true;Connect Timeout=30;Application Name=NEDA Dev</ConnectionString>
+        <CommandTimeout>30</CommandTimeout>
+        <EnableRetryOnFailure>true</EnableRetryOnFailure>
+        <MaxRetryCount>3</MaxRetryCount>
+        <MaxRetryDelay>5</MaxRetryDelay>
+        <Pooling Enabled="true" MinPoolSize="5" MaxPoolSize="100" />
+      </SqlServer>
+      
+      <Sqlite>
+        <Enabled>true</Enabled>
+        <ConnectionString>Data Source=C:\Projects\NEDA\Data\NedaDev.db</ConnectionString>
+        <CacheMode>Default</CacheMode>
+        <ForeignKeys>true</ForeignKeys>
+        <RecursiveTriggers>true</RecursiveTriggers>
+      </Sqlite>
+      
+      <PostgreSQL>
+        <Enabled>false</Enabled>
+        <ConnectionString>Host=localhost;Database=nedadev;Username=postgres;Password=devpassword</ConnectionString>
+      </PostgreSQL>
+      
+      <MongoDB>
+        <Enabled>true</Enabled>
+        <ConnectionString>mongodb://localhost:27017</ConnectionString>
+        <DatabaseName>NedaDev</DatabaseName>
+        <UseSSL>false</UseSSL>
+        <ConnectionTimeout>30</ConnectionTimeout>
+        <ServerSelectionTimeout>30</ServerSelectionTimeout>
+      </MongoDB>
+    </Providers>
+    
+    <MigrationSettings>
+      <AutoMigrate>true</AutoMigrate>
+      <EnableMigrations>true</EnableMigrations>
+      <MigrationsAssembly>NEDA.Core</MigrationsAssembly>
+      <MigrationsNamespace>NEDA.Core.Migrations</MigrationsNamespace>
+      <ContextType>NedaDevelopmentDbContext</ContextType>
+    </MigrationSettings>
+    
+    <SeedData>
+      <Enabled>true</Enabled>
+      <DataFiles>
+        <File Path="C:\Projects\NEDA\Data\Seed\Users.json" />
+        <File Path="C:\Projects\NEDA\Data\Seed\Projects.json" />
+        <File Path="C:\Projects\NEDA\Data\Seed\Templates.json" />
+      </DataFiles>
+      <OverwriteExisting>true</OverwriteExisting>
+      <PreserveRelationships>true</PreserveRelationships>
+    </SeedData>
+    
+    <Caching>
+      <MemoryCache Enabled="true" SizeLimit="100" />
+      <Redis Enabled="true">
+        <ConnectionString>localhost:6379,abortConnect=false,connectTimeout=3000</ConnectionString>
+        <InstanceName>NedaDev:</InstanceName>
+        <DefaultSlidingExpiration>300</DefaultSlidingExpiration>
+      </Redis>
+      <DistributedCache Enabled="true" Provider="Redis" />
+    </Caching>
+  </DatabaseConfiguration>
+
+  <SecurityConfiguration>
+    <Authentication>
+      <Jwt>
+        <Issuer>NEDA-Development</Issuer>
+        <Audience>NEDA-Client-Dev</Audience>
+        <SecretKey>DevelopmentSecretKey_ChangeInProduction_32BytesLong!!</SecretKey>
+        <TokenExpiration>3600</TokenExpiration>
+        <RefreshTokenExpiration>86400</RefreshTokenExpiration>
+        <ValidateIssuer>true</ValidateIssuer>
+        <ValidateAudience>true</ValidateAudience>
+        <ValidateLifetime>true</ValidateLifetime>
+        <RequireHttpsMetadata>false</RequireHttpsMetadata>
+        <ClockSkew>5</ClockSkew>
+      </Jwt>
+      
+      <ApiKeys>
+        <Enabled>true</Enabled>
+        <Keys>
+          <Key Name="DevelopmentClient" Value="dev-api-key-12345-67890" Permissions="Read,Write,Execute" />
+          <Key Name="TestRunner" Value="test-api-key-98765-43210" Permissions="Read,Execute" />
+          <Key Name="SwaggerUI" Value="swagger-dev-key-abcde-fghij" Permissions="Read" />
+        </Keys>
+      </ApiKeys>
+      
+      <WindowsAuthentication>
+        <Enabled>false</Enabled>
+      </WindowsAuthentication>
+    </Authentication>
+    
+    <Authorization>
+      <Policies>
+        <Policy Name="DeveloperPolicy" Requirements="RequireAuthenticatedUser,RequireRole:Developer" />
+        <Policy Name="AdminPolicy" Requirements="RequireAuthenticatedUser,RequireRole:Administrator" />
+        <Policy Name="ApiPolicy" Requirements="RequireApiKey" />
+      </Policies>
+      
+      <Roles>
+        <Role Name="Developer" Permissions="Read,Write,Execute,Debug" />
+        <Role Name="Administrator" Permissions="Read,Write,Execute,Delete,Admin" />
+        <Role Name="Tester" Permissions="Read,Execute" />
+        <Role Name="Viewer" Permissions="Read" />
+      </Roles>
+    </Authorization>
+    
+    <Encryption>
+      <Algorithm>AES-256-CBC</Algorithm>
+      <Key>DevEncryptionKey32BytesLongForAES256!!</Key>
+      <IV>DevInitializationVector16B</IV>
+      <KeyDerivationIterations>10000</KeyDerivationIterations>
+      <KeySize>256</KeySize>
+      <BlockSize>128</BlockSize>
+    </Encryption>
+    
+    <DevelopmentSecurity>
+      <BypassAuthentication>false</BypassAuthentication>
+      <BypassAuthorization>false</BypassAuthorization>
+      <AllowHttp>true</AllowHttp>
+      <DisableHttpsRedirection>false</DisableHttpsRedirection>
+      <DisableSecurityHeaders>false</DisableSecurityHeaders>
+      <ShowDetailedErrors>true</ShowDetailedErrors>
+      <EnableDeveloperExceptionPage>true</EnableDeveloperExceptionPage>
+    </DevelopmentSecurity>
+  </SecurityConfiguration>
+
+  <LoggingConfiguration>
+    <LogLevel Default="Debug">
+      <Override Category="Microsoft" Level="Information" />
+      <Override Category="Microsoft.EntityFrameworkCore" Level="Debug" />
+      <Override Category="Microsoft.EntityFrameworkCore.Database.Command" Level="Information" />
+      <Override Category="System" Level="Information" />
+      <Override Category="NEDA" Level="Debug" />
+    </LogLevel>
+    
+    <Providers>
+      <Console>
+        <Enabled>true</Enabled>
+        <Formatter>Simple</Formatter>
+        <IncludeScopes>true</IncludeScopes>
+        <TimestampFormat>yyyy-MM-dd HH:mm:ss.fff</TimestampFormat>
+        <UseUtcTimestamp>false</UseUtcTimestamp>
+        <SingleLine>true</SingleLine>
+        <Colors>
+          <Default>White</Default>
+          <Information>Cyan</Information>
+          <Warning>Yellow</Warning>
+          <Error>Red</Error>
+          <Critical>DarkRed</Critical>
+          <Debug>Gray</Debug>
+        </Colors>
+      </Console>
+      
+      <File>
+        <Enabled>true</Enabled>
+        <Path>C:\Projects\NEDA\Logs\NEDA-{Date}.log</Path>
+        <Format>JSON</Format>
+        <FileSizeLimit>10485760</FileSizeLimit>
+        <RetainedFileCountLimit>30</RetainedFileCountLimit>
+        <RollingInterval>Day</RollingInterval>
+        <IncludeScopes>true</IncludeScopes>
+        <TimestampFormat>yyyy-MM-dd HH:mm:ss.fff</TimestampFormat>
+      </File>
+      
+      <Debug>
+        <Enabled>true</Enabled>
+      </Debug>
+      
+      <EventLog>
+        <Enabled>false</Enabled>
+        <SourceName>NEDA Development</SourceName>
+        <LogName>Application</LogName>
+      </EventLog>
+      
+      <ApplicationInsights>
+        <Enabled>true</Enabled>
+        <InstrumentationKey>dev-instrumentation-key</InstrumentationKey>
+        <EnableAdaptiveSampling>false</EnableAdaptiveSampling>
+        <EnablePerformanceCounterCollection>true</EnablePerformanceCounterCollection>
+        <EnableDependencyTracking>true</EnableDependencyTracking>
+        <EnableHeartbeat>true</EnableHeartbeat>
+        <SamplingPercentage>100.0</SamplingPercentage>
+      </ApplicationInsights>
+      
+      <Seq>
+        <Enabled>true</Enabled>
+        <ServerUrl>http://localhost:5341</ServerUrl>
+        <ApiKey>dev-seq-api-key</ApiKey>
+        <DefaultLevel>Debug</DefaultLevel>
+      </Seq>
+    </Providers>
+    
+    <Filters>
+      <Filter Category="Microsoft.EntityFrameworkCore.*" MinLevel="Warning" />
+      <Filter Category="System.Net.Http.*" MinLevel="Information" />
+    </Filters>
+    
+    <Enrichers>
+      <Enricher Type="ThreadIdEnricher" />
+      <Enricher Type="MachineNameEnricher" />
+      <Enricher Type="EnvironmentUserNameEnricher" />
+      <Enricher Type="AssemblyVersionEnricher" />
+    </Enrichers>
+  </LoggingConfiguration>
+
+  <MonitoringConfiguration>
+    <HealthChecks>
+      <Enabled>true</Enabled>
+      <Endpoint>/health</Endpoint>
+      <UIEndpoint>/health-ui</UIEndpoint>
+      <EvaluationTimeInSeconds>10</EvaluationTimeInSeconds>
+      <MinimumSecondsBetweenFailureNotifications>60</MinimumSecondsBetweenFailureNotifications>
+      
+      <Checks>
+        <Check Name="Database" Type="SqlServer" Enabled="true">
+          <ConnectionString>Server=(localdb)\mssqllocaldb;Database=NedaDevelopment;Trusted_Connection=True</ConnectionString>
+        </Check>
+        <Check Name="Redis" Type="Redis" Enabled="true">
+          <ConnectionString>localhost:6379</ConnectionString>
+        </Check>
+        <Check Name="ExternalAPI" Type="Http" Enabled="true">
+          <Uri>https://api.nuget.org/v3/index.json</Uri>
+        </Check>
+        <Check Name="DiskStorage" Type="DiskStorage" Enabled="true">
+          <DriveName>C:</DriveName>
+          <MinimumFreeMegabytes>1024</MinimumFreeMegabytes>
+        </Check>
+        <Check Name="Memory" Type="Memory" Enabled="true">
+          <MaximumMemoryBytes>1073741824</MaximumMemoryBytes>
+        </Check>
+      </Checks>
+    </HealthChecks>
+    
+    <Metrics>
+      <Enabled>true</Enabled>
+      <Endpoint>/metrics</Endpoint>
+      <CollectIntervalSeconds>15</CollectIntervalSeconds>
+      
+      <Counters>
+        <Counter Name="cpu_usage" Description="CPU usage percentage" Type="Gauge" />
+        <Counter Name="memory_usage" Description="Memory usage in bytes" Type="Gauge" />
+        <Counter Name="request_duration_seconds" Description="HTTP request duration" Type="Histogram" />
+        <Counter Name="error_rate" Description="Error rate per minute" Type="Counter" />
+        <Counter Name="active_connections" Description="Active database connections" Type="Gauge" />
+        <Counter Name="build_duration_seconds" Description="Build duration in seconds" Type="Histogram" />
+      </Counters>
+    </Metrics>
+    
+    <PerformanceCounters>
+      <Enabled>true</Enabled>
+      <Counters>
+        <Counter Category="Processor" Counter="% Processor Time" Instance="_Total" />
+        <Counter Category="Memory" Counter="Available MBytes" />
+        <Counter Category="Process" Counter="Private Bytes" Instance="NEDA.API" />
+        <Counter Category=".NET CLR Memory" Counter="# Bytes in all Heaps" Instance="NEDA.API" />
+        <Counter Category="ASP.NET Applications" Counter="Requests/Sec" Instance="NEDA.API" />
+      </Counters>
+      <SampleInterval>5</SampleInterval>
+    </PerformanceCounters>
+    
+    <Alerting>
+      <Enabled>true</Enabled>
+      <Channels>
+        <Channel Type="Console" />
+        <Channel Type="File" Path="C:\Projects\NEDA\Logs\Alerts.log" />
+        <Channel Type="Email" Enabled="false" />
+      </Channels>
+      <Thresholds>
+        <Threshold Metric="cpu_usage" Warning="80" Critical="95" />
+        <Threshold Metric="memory_usage" Warning="85" Critical="95" />
+        <Threshold Metric="error_rate" Warning="5" Critical="10" />
+      </Thresholds>
+    </Alerting>
+  </MonitoringConfiguration>
+
+  <ExternalServices>
+    <Services>
+      <Service Name="GitHub" Enabled="true">
+        <ApiUrl>https://api.github.com</ApiUrl>
+        <AccessToken>dev-github-personal-access-token</AccessToken>
+        <Organization>neda-dev-org</Organization>
+        <WebhookSecret>dev-webhook-secret-12345</WebhookSecret>
+        <Timeout>30</Timeout>
+        <RetryCount>3</RetryCount>
+      </Service>
+      
+      <Service Name="AzureDevOps" Enabled="true">
+        <Organization>nedadev</Organization>
+        <Project>NEDA</Project>
+        <PersonalAccessToken>dev-azure-devops-token</PersonalAccessToken>
+        <ApiVersion>7.0</ApiVersion>
+      </Service>
+      
+      <Service Name="Jira" Enabled="true">
+        <Url>https://neda-dev.atlassian.net</Url>
+        <Username>dev@neda.local</Username>
+        <ApiToken>dev-jira-api-token</ApiToken>
+        <ProjectKey>NEDADEV</ProjectKey>
+      </Service>
+      
+      <Service Name="Slack" Enabled="true">
+        <BotToken>xoxb-dev-slack-bot-token</BotToken>
+        <SigningSecret>dev-slack-signing-secret</SigningSecret>
+        <DefaultChannel>#neda-development</DefaultChannel>
+        <WebhookUrl>https://hooks.slack.com/services/DEV/WEBHOOK/URL</WebhookUrl>
+      </Service>
+      
+      <Service Name="SendGrid" Enabled="true">
+        <ApiKey>dev-sendgrid-api-key</ApiKey>
+        <FromEmail>noreply@neda-dev.local</FromEmail>
+        <FromName>NEDA Development</FromName>
+        <SandboxMode>true</SandboxMode>
+      </Service>
+      
+      <Service Name="Twilio" Enabled="false">
+        <AccountSid>dev-account-sid</AccountSid>
+        <AuthToken>dev-auth-token</AuthToken>
+        <FromNumber>+15005550006</FromNumber>
+      </Service>
+    </Services>
+    
+    <Webhooks>
+      <Enabled>true</Enabled>
+      <Secret>dev-webhook-secret-key</Secret>
+      <Timeout>30</Timeout>
+      <MaxRetries>3</MaxRetries>
+      <Endpoints>
+        <Endpoint Path="/webhooks/github" Secret="github-webhook-secret" />
+        <Endpoint Path="/webhooks/azure" Secret="azure-webhook-secret" />
+        <Endpoint Path="/webhooks/slack" Secret="slack-webhook-secret" />
+      </Endpoints>
+    </Webhooks>
+  </ExternalServices>
+
+  <AIConfiguration>
+    <MachineLearning>
+      <ModelCachePath>C:\Projects\NEDA\Models\Cache</ModelCachePath>
+      <TrainingDataPath>C:\Projects\NEDA\Data\Training</TrainingDataPath>
+      <EnableGPU>false</EnableGPU>
+      <MaxBatchSize>32</MaxBatchSize>
+      <DefaultEpochs>50</DefaultEpochs>
+      <ValidationSplit>0.2</ValidationSplit>
+      <EarlyStoppingPatience>10</EarlyStoppingPatience>
+      <LearningRate>0.001</LearningRate>
+      <Optimizer>Adam</Optimizer>
+      <LossFunction>CrossEntropy</LossFunction>
+    </MachineLearning>
+    
+    <NaturalLanguageProcessing>
+      <ModelPath>C:\Projects\NEDA\Models\NLP</ModelPath>
+      <LanguageDetectionConfidence>0.7</LanguageDetectionConfidence>
+      <EnableSentimentAnalysis>true</EnableSentimentAnalysis>
+      <EnableEntityRecognition>true</EnableEntityRecognition>
+      <MaxTextLength>10000</MaxTextLength>
+      <Tokenizer>WhiteSpace</Tokenizer>
+      <StopWords>
+        <Language>en</Language>
+        <Language>tr</Language>
+      </StopWords>
+    </NaturalLanguageProcessing>
+    
+    <ComputerVision>
+      <ModelPath>C:\Projects\NEDA\Models\Vision</ModelPath>
+      <ImageProcessingTimeout>30</ImageProcessingTimeout>
+      <MaxImageSizeMB>10</MaxImageSizeMB>
+      <SupportedFormats>
+        <Format>jpg</Format>
+        <Format>jpeg</Format>
+        <Format>png</Format>
+        <Format>bmp</Format>
+        <Format>gif</Format>
+      </SupportedFormats>
+      <DefaultResolution>1920x1080</DefaultResolution>
+      <CompressionQuality>85</CompressionQuality>
+    </ComputerVision>
+    
+    <NeuralNetworks>
+      <Framework>TensorFlow.NET</Framework>
+      <Version>0.20.0</Version>
+      <Backend>CPU</Backend>
+      <MemoryLimit>4096</MemoryLimit>
+      <ThreadCount>4</ThreadCount>
+    </NeuralNetworks>
+  </AIConfiguration>
+
+  <GameDevelopmentConfiguration>
+    <UnrealEngine>
+      <EnginePath>C:\Program Files\Epic Games\UE_5.3</EnginePath>
+      <ProjectTemplatesPath>C:\Projects\NEDA\Templates\Unreal</ProjectTemplatesPath>
+      <BuildConfigurations>
+        <Configuration>Development</Configuration>
+        <Configuration>Debug</Configuration>
+        <Configuration>Shipping</Configuration>
+      </BuildConfigurations>
+      <EnableLiveCoding>true</EnableLiveCoding>
+      <MaxCompileJobs>8</MaxCompileJobs>
+      <ShaderCompiling>
+        <Enabled>true</Enabled>
+        <Processes>4</Processes>
+        <MemoryPerProcess>2048</MemoryPerProcess>
+      </ShaderCompiling>
+    </UnrealEngine>
+    
+    <Unity>
+      <InstallationPath>C:\Program Files\Unity\Hub\Editor</InstallationPath>
+      <ProjectTemplatesPath>C:\Projects\NEDA\Templates\Unity</ProjectTemplatesPath>
+      <DefaultVersion>2022.3.0f1</DefaultVersion>
+      <BuildTargets>
+        <Target>StandaloneWindows64</Target>
+        <Target>Android</Target>
+        <Target>iOS</Target>
+      </BuildTargets>
+      <ScriptingBackend>Mono</ScriptingBackend>
+      <ApiCompatibilityLevel>.NET Standard 2.1</ApiCompatibilityLevel>
+    </Unity>
+    
+    <AssetPipeline>
+      <ImportPaths>
+        <Path>C:\Projects\NEDA\Assets\Source</Path>
+        <Path>C:\Projects\NEDA\Assets\External</Path>
+      </ImportPaths>
+      <ExportPath>C:\Projects\NEDA\Assets\Processed</ExportPath>
+      <MaxTextureSize>4096</MaxTextureSize>
+      <CompressionQuality>85</CompressionQuality>
+      <GenerateMipmaps>true</GenerateMipmaps>
+      <TextureFormats>
+        <Format>DDS</Format>
+        <Format>PNG</Format>
+        <Format>TGA</Format>
+      </TextureFormats>
+    </AssetPipeline>
+  </GameDevelopmentConfiguration>
+
+  <DevelopmentTools>
+    <CodeAnalysis>
+      <Enabled>true</Enabled>
+      <Rulesets>
+        <Ruleset Name="StyleCop" Path="C:\Projects\NEDA\Config\StyleCop\stylecop.json" />
+        <Ruleset Name="Sonar" Path="C:\Projects\NEDA\Config\Sonar\sonar-project.properties" />
+      </Rulesets>
+      <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    </CodeAnalysis>
+    
+    <TestingTools>
+      <UnitTesting>
+        <Framework>xUnit</Framework>
+        <Runner>vstest</Runner>
+        <ParallelExecution>true</ParallelExecution>
+        <CodeCoverage>true</CodeCoverage>
+        <CoverageTool>coverlet</CoverageTool>
+      </UnitTesting>
+      
+      <IntegrationTesting>
+        <Enabled>true</Enabled>
+        <TestDatabase>NedaTest</TestDatabase>
+        <CleanDatabase>true</CleanDatabase>
+      </IntegrationTesting>
+      
+      <PerformanceTesting>
+        <Enabled>true</Enabled>
+        <Tool>BenchmarkDotNet</Tool>
+        <WarmupCount>10</WarmupCount>
+        <IterationCount>100</IterationCount>
+      </PerformanceTesting>
+    </TestingTools>
+    
+    <DebuggingTools>
+      <VisualStudio>
+        <Version>2022</Version>
+        <SolutionFile>C:\Projects\NEDA\NEDA.sln</SolutionFile>
+        <LaunchProfiles>
+          <Profile Name="NEDA.API" Project="NEDA.API" LaunchBrowser="true" />
+          <Profile Name="NEDA.UI" Project="NEDA.UI" LaunchBrowser="true" />
+        </LaunchProfiles>
+      </VisualStudio>
+      
+      <JetBrainsRider>
+        <Enabled>true</Enabled>
+        <SolutionFile>C:\Projects\NEDA\NEDA.sln</SolutionFile>
+      </JetBrainsRider>
+      
+      <DotNetCLI>
+        <WatchMode>true</WatchMode>
+        <HotReload>true</HotReload>
+        <LiveReload>true</LiveReload>
+      </DotNetCLI>
+    </DebuggingTools>
+    
+    <Profiling>
+      <Enabled>true</Enabled>
+      <Tools>
+        <Tool Name="DotTrace" Enabled="true" />
+        <Tool Name="DotMemory" Enabled="true" />
+        <Tool Name="VisualStudioProfiler" Enabled="true" />
+      </Tools>
+      <SamplingInterval>10</SamplingInterval>
+    </Profiling>
+  </DevelopmentTools>
+
+  <FeatureFlags>
+    <Flag Name="ExperimentalAI" Enabled="true" Description="Experimental AI features" />
+    <Flag Name="AdvancedAnalytics" Enabled="true" Description="Advanced analytics dashboard" />
+    <Flag Name="RealTimeMonitoring" Enabled="true" Description="Real-time system monitoring" />
+    <Flag Name="AutoScaling" Enabled="false" Description="Automatic scaling of resources" />
+    <Flag Name="MultiTenancy" Enabled="false" Description="Multi-tenant architecture" />
+    <Flag Name="AdvancedSecurity" Enabled="true" Description="Advanced security features" />
+    <Flag Name="CloudDeployment" Enabled="false" Description="Cloud deployment capabilities" />
+    <Flag Name="GameEngineIntegration" Enabled="true" Description="Game engine integration" />
+    <Flag Name="VRSupport" Enabled="false" Description="Virtual reality support" />
+    <Flag Name="BlockchainIntegration" Enabled="false" Description="Blockchain integration" />
+    <Flag Name="QuantumComputing" Enabled="false" Description="Quantum computing experiments" />
+    <Flag Name="EdgeComputing" Enabled="false" Description="Edge computing capabilities" />
+    <Flag Name="MachineLearningTraining" Enabled="true" Description="On-premise ML training" />
+    <Flag Name="NaturalLanguageCommands" Enabled="true" Description="Natural language command processing" />
+  </FeatureFlags>
+
+  <DeveloperPreferences>
+    <AutoSave Enabled="true" Interval="30" />
+    <MaxUndoSteps>50</MaxUndoSteps>
+    <Theme>Dark</Theme>
+    <DefaultView>Dashboard</DefaultView>
+    <Notifications Enabled="true" Sound="true" />
+    <Animations Enabled="true" />
+    <CodeEditor>
+      <Font Family="Consolas" Size="12" />
+      <Theme>Visual Studio Dark</Theme>
+      <LineNumbers>true</LineNumbers>
+      <WordWrap>false</WordWrap>
+      <FormatOnSave>true</FormatOnSave>
+    </CodeEditor>
+    <AutoUpdateCheck Enabled="true" Interval="86400" />
+    <Telemetry Enabled="true" />
+    <CrashReporting Enabled="true" />
+    <UsageStatistics Enabled="true" />
+    <PreviewFeatures Enabled="true" />
+  </DeveloperPreferences>
+
+  <LocalPaths>
+    <Root>C:\Projects\NEDA</Root>
+    <Source>C:\Projects\NEDA\Source</Source>
+    <Binaries>C:\Projects\NEDA\Bin</Binaries>
+    <Data>C:\Projects\NEDA\Data</Data>
+    <Logs>C:\Projects\NEDA\Logs</Logs>
+    <Config>C:\Projects\NEDA\Config</Config>
+    <Templates>C:\Projects\NEDA\Templates</Templates>
+    <Assets>C:\Projects\NEDA\Assets</Assets>
+    <Models>C:\Projects\NEDA\Models</Models>
+    <Packages>C:\Projects\NEDA\Packages</Packages>
+    <TestResults>C:\Projects\NEDA\TestResults</TestResults>
+    <Reports>C:\Projects\NEDA\Reports</Reports>
+    <Backups>C:\Projects\NEDA\Backups</Backups>
+    <Cache>C:\Projects\NEDA\Cache</Cache>
+    <Temp>C:\Projects\NEDA\Temp</Temp>
+  </LocalPaths>
+
+  <Dependencies>
+    <NuGetSources>
+      <Source Name="NuGet Official" Url="https://api.nuget.org/v3/index.json" />
+      <Source Name="Local Feed" Url="C:\Projects\NEDA\Packages" />
+      <Source Name="GitHub Packages" Url="https://nuget.pkg.github.com/neda-dev/index.json" />
+    </NuGetSources>
+    
+    <ExternalTools>
+      <Tool Name="Git" Path="C:\Program Files\Git\bin\git.exe" Required="true" />
+      <Tool Name="Node.js" Path="C:\Program Files\nodejs\node.exe" Required="false" />
+      <Tool Name="Python" Path="C:\Python39\python.exe" Required="false" />
+      <Tool Name="Docker" Path="C:\Program Files\Docker\Docker\resources\bin\docker.exe" Required="false" />
+      <Tool Name="FFmpeg" Path="C:\Program Files\FFmpeg\bin\ffmpeg.exe" Required="false" />
+      <Tool Name="ImageMagick" Path="C:\Program Files\ImageMagick\magick.exe" Required="false" />
+    </ExternalTools>
+    
+    <Services>
+      <Service Name="Redis" Type="Local" Enabled="true">
+        <Executable>redis-server.exe</Executable>
+        <Arguments>--port 6379</Arguments>
+      </Service>
+      <Service Name="MongoDB" Type="Local" Enabled="true">
+        <Executable>mongod.exe</Executable>
+        <Arguments>--dbpath "C:\Projects\NEDA\Data\MongoDB" --port 27017</Arguments>
+      </Service>
+      <Service Name="RabbitMQ" Type="Local" Enabled="true">
+        <Executable>rabbitmq-server.bat</Executable>
+      </Service>
+      <Service Name="Elasticsearch" Type="Local" Enabled="false">
+        <Executable>elasticsearch.bat</Executable>
+      </Service>
+    </Services>
+  </Dependencies>
+
+</DevelopmentConfiguration>

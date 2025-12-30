@@ -1,0 +1,14 @@
+<Project>
+	<PropertyGroup>
+		<!-- Genel uyarılar -->
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+		<!-- NuGet özel uyarıları -->
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningsAsErrors></WarningsAsErrors>
+		<NoWarn>$(NoWarn);NU1902;NU1903;NU1904;NU1701;NU1202</NoWarn>
+
+		<!-- Güvenlik advisory'lerini build'i durdurma -->
+		<NuGetAudit>true</NuGetAudit>
+	</PropertyGroup>
+</Project>

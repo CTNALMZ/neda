@@ -1,0 +1,399 @@
+{
+  "SDKConfiguration": {
+    "Version": "1.0.0",
+    "Name": "NEDA Client SDK",
+    "Description": "Official Software Development Kit for NEDA (Neuro-Evolving Digital Assistant) API",
+    "Author": "NEDA Development Team",
+    "License": "Proprietary",
+    "MinimumApiVersion": "1.0.0",
+    "TargetFramework": "net6.0"
+  },
+
+  "ClientSettings": {
+    "DefaultTimeout": "00:00:30",
+    "MaxRetryAttempts": 3,
+    "RetryDelay": "00:00:02",
+    "CacheDurationMinutes": 5,
+    "MaxRequestsPerMinute": 60,
+    "EnableCompression": true,
+    "AutoReconnect": true,
+    "ReconnectInterval": "00:00:05",
+    "EnableTelemetry": true,
+    "TelemetrySampleRate": 0.1,
+    "EnableDiagnostics": true
+  },
+
+  "APISettings": {
+    "BaseUrl": "https://api.neda.ai/v1",
+    "HealthCheckEndpoint": "/api/health",
+    "AuthenticationEndpoint": "/api/auth",
+    "ProjectEndpoint": "/api/projects",
+    "CommandEndpoint": "/api/commands",
+    "SystemEndpoint": "/api/system",
+    "Version": "v1",
+    "SupportedContentTypes": [
+      "application/json",
+      "application/xml"
+    ],
+    "RequestCompression": "gzip",
+    "ResponseCompression": "gzip"
+  },
+
+  "Authentication": {
+    "TokenType": "Bearer",
+    "TokenExpiryBuffer": "00:05:00",
+    "AutoRefresh": true,
+    "RefreshThreshold": "00:10:00",
+    "SupportedAuthMethods": [
+      "JWT",
+      "APIKey",
+      "OAuth2"
+    ],
+    "DefaultAuthMethod": "JWT"
+  },
+
+  "Caching": {
+    "Enabled": true,
+    "DefaultTTL": "00:05:00",
+    "MaxCacheSize": "100MB",
+    "CacheStrategies": {
+      "ProjectData": "00:10:00",
+      "UserProfile": "01:00:00",
+      "SystemStatus": "00:01:00",
+      "CommandHistory": "00:30:00"
+    },
+    "CacheProviders": [
+      "Memory",
+      "Distributed",
+      "FileSystem"
+    ]
+  },
+
+  "RateLimiting": {
+    "Enabled": true,
+    "Strategy": "TokenBucket",
+    "MaxConcurrentRequests": 10,
+    "RequestsPerMinute": 60,
+    "RequestsPerHour": 1000,
+    "BurstLimit": 20,
+    "QueueTimeout": "00:00:30"
+  },
+
+  "Logging": {
+    "Enabled": true,
+    "Level": "Information",
+    "Providers": [
+      "Console",
+      "File",
+      "ApplicationInsights"
+    ],
+    "FileSettings": {
+      "Path": "Logs/neda-sdk-{Date}.log",
+      "MaxFileSize": "10MB",
+      "MaxFiles": 10,
+      "RollingInterval": "Day"
+    },
+    "SanitizeSensitiveData": true,
+    "SensitiveFields": [
+      "password",
+      "token",
+      "authorization",
+      "apikey"
+    ]
+  },
+
+  "ErrorHandling": {
+    "EnableGlobalErrorHandler": true,
+    "LogExceptions": true,
+    "RetryOnNetworkFailure": true,
+    "RetryOnServerError": true,
+    "MaxRetryCount": 3,
+    "CircuitBreaker": {
+      "Enabled": true,
+      "FailureThreshold": 0.5,
+      "SamplingDuration": "00:01:00",
+      "MinimumThroughput": 10,
+      "DurationOfBreak": "00:00:30"
+    },
+    "CustomErrorMappings": {
+      "400": "BadRequest",
+      "401": "Unauthorized",
+      "403": "Forbidden",
+      "404": "NotFound",
+      "429": "TooManyRequests",
+      "500": "InternalServerError",
+      "503": "ServiceUnavailable"
+    }
+  },
+
+  "Telemetry": {
+    "Enabled": true,
+    "Provider": "ApplicationInsights",
+    "InstrumentationKey": "",
+    "SampleRate": 0.1,
+    "TrackDependencies": true,
+    "TrackExceptions": true,
+    "TrackMetrics": true,
+    "TrackEvents": true,
+    "CustomMetrics": [
+      "RequestDuration",
+      "CacheHitRate",
+      "ErrorRate",
+      "ConcurrentRequests"
+    ]
+  },
+
+  "Serialization": {
+    "DefaultFormat": "JSON",
+    "JsonSettings": {
+      "PropertyNamingPolicy": "CamelCase",
+      "WriteIndented": false,
+      "IgnoreNullValues": true,
+      "PropertyNameCaseInsensitive": true
+    },
+    "SupportedFormats": [
+      "JSON",
+      "XML",
+      "MessagePack"
+    ]
+  },
+
+  "Endpoints": {
+    "Health": {
+      "Path": "/api/health",
+      "Method": "GET",
+      "CacheDuration": "00:00:30",
+      "AuthenticationRequired": false
+    },
+    "Authentication": {
+      "Login": {
+        "Path": "/api/auth/login",
+        "Method": "POST",
+        "CacheDuration": "00:00:00",
+        "AuthenticationRequired": false
+      },
+      "Logout": {
+        "Path": "/api/auth/logout",
+        "Method": "POST",
+        "CacheDuration": "00:00:00",
+        "AuthenticationRequired": true
+      },
+      "Refresh": {
+        "Path": "/api/auth/refresh",
+        "Method": "POST",
+        "CacheDuration": "00:00:00",
+        "AuthenticationRequired": true
+      }
+    },
+    "Projects": {
+      "GetAll": {
+        "Path": "/api/projects",
+        "Method": "GET",
+        "CacheDuration": "00:05:00",
+        "AuthenticationRequired": true
+      },
+      "GetById": {
+        "Path": "/api/projects/{id}",
+        "Method": "GET",
+        "CacheDuration": "00:10:00",
+        "AuthenticationRequired": true
+      },
+      "Create": {
+        "Path": "/api/projects",
+        "Method": "POST",
+        "CacheDuration": "00:00:00",
+        "AuthenticationRequired": true
+      },
+      "Update": {
+        "Path": "/api/projects/{id}",
+        "Method": "PUT",
+        "CacheDuration": "00:00:00",
+        "AuthenticationRequired": true
+      },
+      "Delete": {
+        "Path": "/api/projects/{id}",
+        "Method": "DELETE",
+        "CacheDuration": "00:00:00",
+        "AuthenticationRequired": true
+      }
+    },
+    "Commands": {
+      "Execute": {
+        "Path": "/api/commands/execute",
+        "Method": "POST",
+        "CacheDuration": "00:00:00",
+        "AuthenticationRequired": true
+      },
+      "GetStatus": {
+        "Path": "/api/commands/{id}/status",
+        "Method": "GET",
+        "CacheDuration": "00:00:10",
+        "AuthenticationRequired": true
+      },
+      "GetHistory": {
+        "Path": "/api/commands/history",
+        "Method": "GET",
+        "CacheDuration": "00:30:00",
+        "AuthenticationRequired": true
+      }
+    },
+    "System": {
+      "GetStatus": {
+        "Path": "/api/system/status",
+        "Method": "GET",
+        "CacheDuration": "00:01:00",
+        "AuthenticationRequired": true
+      },
+      "GetMetrics": {
+        "Path": "/api/system/metrics",
+        "Method": "GET",
+        "CacheDuration": "00:00:30",
+        "AuthenticationRequired": true
+      }
+    }
+  },
+
+  "Features": {
+    "RealTimeNotifications": {
+      "Enabled": true,
+      "Provider": "SignalR",
+      "HubUrl": "/notificationHub",
+      "AutoReconnect": true,
+      "KeepAliveInterval": "00:00:30"
+    },
+    "FileUpload": {
+      "Enabled": true,
+      "MaxFileSize": "100MB",
+      "AllowedExtensions": [ ".json", ".xml", ".txt", ".zip" ],
+      "ChunkSize": "1MB",
+      "ParallelUploads": 3
+    },
+    "BatchOperations": {
+      "Enabled": true,
+      "MaxBatchSize": 100,
+      "BatchDelay": "00:00:01",
+      "AutoFlush": true
+    },
+    "Webhooks": {
+      "Enabled": true,
+      "SecretHeader": "X-NEDA-Signature",
+      "Timeout": "00:00:30",
+      "RetryCount": 3
+    }
+  },
+
+  "Security": {
+    "SSLVerification": true,
+    "CertificatePinning": false,
+    "AllowedCipherSuites": [
+      "TLS_AES_128_GCM_SHA256",
+      "TLS_AES_256_GCM_SHA384",
+      "TLS_CHACHA20_POLY1305_SHA256"
+    ],
+    "Headers": {
+      "UserAgent": "NEDA-SDK/1.0.0",
+      "X-Client-Version": "1.0.0",
+      "X-Client-Id": ""
+    },
+    "SensitiveData": {
+      "MaskInLogs": true,
+      "EncryptLocalStorage": true,
+      "AutoClearCredentials": true
+    }
+  },
+
+  "Monitoring": {
+    "EnablePerformanceCounters": true,
+    "MetricsCollectionInterval": "00:01:00",
+    "AlertOnHighErrorRate": true,
+    "ErrorRateThreshold": 0.05,
+    "AlertOnHighLatency": true,
+    "LatencyThreshold": "00:00:05"
+  },
+
+  "Compatibility": {
+    "SupportedFrameworks": [
+      "net6.0",
+      "net7.0",
+      "net8.0"
+    ],
+    "SupportedPlatforms": [
+      "Windows",
+      "Linux",
+      "macOS"
+    ],
+    "SupportedArchitectures": [
+      "x64",
+      "arm64"
+    ],
+    "MinimumOSVersions": {
+      "Windows": "10",
+      "Linux": "Ubuntu 18.04",
+      "macOS": "10.15"
+    }
+  },
+
+  "Localization": {
+    "DefaultCulture": "en-US",
+    "SupportedCultures": [
+      "en-US",
+      "en-GB",
+      "tr-TR",
+      "de-DE",
+      "fr-FR",
+      "es-ES"
+    ],
+    "ResourcePath": "Resources",
+    "AutoDetectCulture": true
+  },
+
+  "Updates": {
+    "AutoCheck": true,
+    "CheckInterval": "1.00:00:00",
+    "UpdateChannel": "Stable",
+    "AvailableChannels": [
+      "Stable",
+      "Beta",
+      "Alpha"
+    ],
+    "DownloadSource": "https://updates.neda.ai/sdk"
+  },
+
+  "Diagnostics": {
+    "EnableDebugMode": false,
+    "VerboseLogging": false,
+    "DumpRequests": false,
+    "DumpResponses": false,
+    "MaxDumpSize": "1MB",
+    "DiagnosticEndpoints": {
+      "Ping": "/api/diagnostics/ping",
+      "Version": "/api/diagnostics/version",
+      "Config": "/api/diagnostics/config"
+    }
+  },
+
+  "Examples": {
+    "QuickStart": {
+      "BaseUrl": "https://api.neda.ai/v1",
+      "Timeout": "00:00:30",
+      "EnableCaching": true,
+      "EnableLogging": true
+    },
+    "Production": {
+      "BaseUrl": "https://api.neda.ai/v1",
+      "Timeout": "00:01:00",
+      "MaxRetryAttempts": 5,
+      "EnableCaching": true,
+      "EnableCompression": true,
+      "EnableTelemetry": true,
+      "EnableCircuitBreaker": true
+    },
+    "Development": {
+      "BaseUrl": "https://dev-api.neda.ai/v1",
+      "Timeout": "00:02:00",
+      "EnableDebugMode": true,
+      "VerboseLogging": true,
+      "DumpRequests": true
+    }
+  }
+}

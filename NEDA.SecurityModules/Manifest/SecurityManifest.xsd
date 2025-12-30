@@ -1,0 +1,61 @@
+<? xml version = "1.0" encoding = "UTF-8" ?>
+< xs : schema xmlns: xs = "http://www.w3.org/2001/XMLSchema"
+           targetNamespace = "http://schemas.neda.ai/security/2024/v1"
+           xmlns = "http://schemas.neda.ai/security/2024/v1"
+           elementFormDefault = "qualified" >
+
+
+    < !--Root Element-- >
+    < xs:element name = "SecurityManifest" >
+        < xs:complexType >
+            < xs:sequence >
+                < xs:element ref= "Metadata" />
+                < xs:element ref= "SystemSecurity" />
+                < xs:element ref= "Authentication" />
+                < xs:element ref= "Authorization" />
+                < xs:element ref= "Encryption" />
+                < xs:element ref= "NetworkSecurity" />
+                < xs:element ref= "DataProtection" />
+                < xs:element ref= "Monitoring" />
+                < xs:element ref= "PhysicalSecurity" />
+                < xs:element ref= "IncidentResponse" />
+                < xs:element ref= "AISecurity" />
+                < xs:element ref= "ThirdPartySecurity" />
+                < xs:element ref= "EmergencyProtocols" />
+                < xs:element ref= "Compliance" />
+                < xs:element ref= "DigitalSignature" />
+            </ xs:sequence >
+        </ xs:complexType >
+    </ xs:element >
+
+
+    < !--Metadata Structure-- >
+    < xs:element name = "Metadata" >
+        < xs:complexType >
+            < xs:sequence >
+                < xs:element name = "ManifestId" type="xs:string" />
+                <xs:element name = "Version" type="xs:string" />
+                <xs:element name = "Created" type="xs:dateTime" />
+                <xs:element name = "LastModified" type="xs:dateTime" />
+                <xs:element name = "EffectiveDate" type="xs:dateTime" />
+                <xs:element name = "ExpiryDate" type="xs:dateTime" />
+                <xs:element name = "Issuer" type="xs:string" />
+                <xs:element name = "IssuerSignature" type="xs:string" />
+                <xs:element name = "DigitalSignature" type="xs:string" />
+                <xs:element name = "Description" type="xs:string" />
+                <xs:element name = "Scope" type="xs:string" />
+                <xs:element name = "ComplianceFrameworks" >
+                    < xs:complexType >
+                        < xs:sequence >
+                            < xs:element name = "Framework" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence >
+                    </ xs:complexType >
+                </ xs:element >
+            </ xs:sequence >
+        </ xs:complexType >
+    </ xs:element >
+
+
+    < !--All other complex types would follow similarly... -->
+    
+</xs:schema >

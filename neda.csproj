@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- ================= TEMEL ================= -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>NEDA.Core</RootNamespace>
+    <AssemblyName>NEDA.Core</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <!-- Core katman asla UI iÃƒÂ§ermez -->
+    <UseWPF>false</UseWPF>
+    <UseWindowsForms>false</UseWindowsForms>
+  </PropertyGroup>
+  <!-- ================= BUILD DAVRANIÃ…ÂI ================= -->
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <!-- ================= ABSTRACTION & CORE DEPENDENCIES ================= -->
+  <ItemGroup>
+    <!-- Dependency Injection (sadece abstraction seviyesi) -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />
+    <!-- Configuration abstractions -->
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+    <!-- Logging abstractions -->
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.1" />
+    <!-- Options pattern -->
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="FluentValidation" Version="11.9.2" />
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NodaTime" Version="3.1.9" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+  </ItemGroup>
+  <!-- ================= DATA & SERIALIZATION ================= -->
+  <!-- ================= UTILITIES ================= -->
+  <!-- ================= SECURITY (CORE LEVEL) ================= -->
+  <!-- ================= DOMAIN SUPPORT ================= -->
+  <ItemGroup>
+    <!-- Mediator pattern (command/query abstraction) -->
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="NEDA.UI\App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NEDA.UI\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+</Project>

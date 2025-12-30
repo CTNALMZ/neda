@@ -1,0 +1,931 @@
+{
+  "$schema": "https://schema.neda.io/container-config/v2.1.0",
+  "name": "neda-container-configuration",
+  "version": "2.1.0",
+  "description": "NEDA Container Configuration - Industrial-grade container orchestration and deployment",
+  "metadata": {
+    "created": "2024-01-15T10:00:00Z",
+    "author": "NEDA Engineering Team",
+    "license": "Commercial",
+    "environment": "production",
+    "compliance": {
+      "hipaa": true,
+      "gdpr": true,
+      "soc2": true
+    }
+  },
+
+  "container": {
+    "name": "neda-ai-engine",
+    "tag": "latest",
+    "registry": "registry.neda.io",
+    "repository": "neda/ai-engine",
+    "digest": "sha256:abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yzab5678cdef",
+    "architecture": "linux/amd64",
+    "os": "linux",
+    "variant": ""
+  },
+
+  "runtime": {
+    "engine": "containerd",
+    "version": "1.7.0",
+    "isolation": "process",
+    "hyperv": false,
+    "cgroupDriver": "systemd",
+    "cgroupVersion": "v2",
+    "seccompProfile": "runtime/default",
+    "apparmorProfile": "neda-default",
+    "selinux": {
+      "enabled": true,
+      "type": "container_runtime_t",
+      "level": "s0:c123,c456"
+    }
+  },
+
+  "security": {
+    "level": "high",
+    "readOnlyRootFilesystem": true,
+    "privileged": false,
+    "allowPrivilegeEscalation": false,
+    "capabilities": {
+      "add": [
+        "NET_BIND_SERVICE",
+        "SYS_PTRACE",
+        "SYS_ADMIN"
+      ],
+      "drop": [
+        "ALL"
+      ]
+    },
+    "seccomp": {
+      "profile": "default.json",
+      "enabled": true
+    },
+    "apparmor": {
+      "profile": "neda-container",
+      "enabled": true
+    },
+    "selinux": {
+      "profile": "container_runtime_t",
+      "enabled": true
+    },
+    "noNewPrivileges": true,
+    "maskedPaths": [
+      "/proc/acpi",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/proc/sched_debug",
+      "/sys/firmware",
+      "/proc/scsi"
+    ],
+    "readonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ],
+    "userNamespace": {
+      "enabled": true,
+      "uidMappings": "0:100000:65536",
+      "gidMappings": "0:100000:65536"
+    }
+  },
+
+  "resources": {
+    "cpu": {
+      "request": "1000m",
+      "limit": "4000m",
+      "shares": 1024,
+      "quota": 100000,
+      "period": 100000,
+      "cpus": "0-3",
+      "mems": "0"
+    },
+    "memory": {
+      "request": "4Gi",
+      "limit": "16Gi",
+      "swap": "2Gi",
+      "reservation": "2Gi",
+      "kernelMemory": "512Mi",
+      "hugepages": [
+        {
+          "pageSize": "2Mi",
+          "limit": "1Gi"
+        }
+      ],
+      "oomKillDisable": false,
+      "oomScoreAdj": -500
+    },
+    "storage": {
+      "size": "50Gi",
+      "type": "ext4",
+      "mountOptions": [
+        "noatime",
+        "nodiratime",
+        "discard"
+      ],
+      "quotas": {
+        "enabled": true,
+        "size": "100Gi",
+        "inodes": 1000000
+      }
+    },
+    "devices": [
+      {
+        "name": "nvidia-gpu",
+        "count": 2,
+        "capabilities": [
+          "compute",
+          "utility",
+          "video"
+        ],
+        "driver": "nvidia",
+        "deviceIDs": [
+          "10de:1b06",
+          "10de:10f0"
+        ]
+      },
+      {
+        "name": "fpga-accelerator",
+        "count": 1,
+        "capabilities": [
+          "accelerated-compute"
+        ],
+        "driver": "dfl",
+        "deviceIDs": [
+          "8086:0b30"
+        ]
+      }
+    ],
+    "hugepages": {
+      "enabled": true,
+      "size": "2Mi",
+      "count": 512
+    }
+  },
+
+  "networking": {
+    "mode": "bridge",
+    "driver": "macvlan",
+    "ipv4": {
+      "address": "10.0.0.100/24",
+      "gateway": "10.0.0.1",
+      "dns": [
+        "8.8.8.8",
+        "8.8.4.4",
+        "1.1.1.1"
+      ],
+      "dnsSearch": [
+        "neda.local",
+        "cluster.local"
+      ]
+    },
+    "ipv6": {
+      "address": "2001:db8::100/64",
+      "gateway": "2001:db8::1",
+      "enabled": true
+    },
+    "ports": [
+      {
+        "name": "http",
+        "containerPort": 8080,
+        "hostPort": 8080,
+        "protocol": "tcp",
+        "hostIP": "0.0.0.0"
+      },
+      {
+        "name": "https",
+        "containerPort": 8443,
+        "hostPort": 8443,
+        "protocol": "tcp",
+        "hostIP": "0.0.0.0"
+      },
+      {
+        "name": "grpc",
+        "containerPort": 50051,
+        "hostPort": 50051,
+        "protocol": "tcp",
+        "hostIP": "0.0.0.0"
+      },
+      {
+        "name": "metrics",
+        "containerPort": 9090,
+        "hostPort": 9090,
+        "protocol": "tcp",
+        "hostIP": "0.0.0.0"
+      },
+      {
+        "name": "debug",
+        "containerPort": 40000,
+        "hostPort": 40000,
+        "protocol": "tcp",
+        "hostIP": "127.0.0.1"
+      }
+    ],
+    "networks": [
+      {
+        "name": "neda-frontend",
+        "driver": "bridge",
+        "subnet": "10.0.1.0/24",
+        "gateway": "10.0.1.1"
+      },
+      {
+        "name": "neda-backend",
+        "driver": "overlay",
+        "subnet": "10.0.2.0/24",
+        "gateway": "10.0.2.1",
+        "encrypted": true
+      }
+    ],
+    "firewall": {
+      "ingress": [
+        {
+          "from": "0.0.0.0/0",
+          "toPorts": [
+            {
+              "ports": "8080,8443",
+              "protocol": "tcp"
+            }
+          ]
+        },
+        {
+          "from": "10.0.0.0/8",
+          "toPorts": [
+            {
+              "ports": "50051",
+              "protocol": "tcp"
+            }
+          ]
+        }
+      ],
+      "egress": [
+        {
+          "to": "0.0.0.0/0",
+          "toPorts": [
+            {
+              "ports": "80,443",
+              "protocol": "tcp"
+            }
+          ]
+        }
+      ]
+    },
+    "loadBalancer": {
+      "enabled": true,
+      "type": "haproxy",
+      "stickySessions": true,
+      "healthCheck": {
+        "path": "/health",
+        "interval": "30s",
+        "timeout": "5s",
+        "healthyThreshold": 2,
+        "unhealthyThreshold": 3
+      }
+    }
+  },
+
+  "storage": {
+    "volumes": [
+      {
+        "name": "neda-config",
+        "type": "configMap",
+        "source": "neda-configuration",
+        "target": "/etc/neda",
+        "readOnly": true,
+        "items": [
+          {
+            "key": "appsettings.json",
+            "path": "appsettings.json"
+          },
+          {
+            "key": "security.json",
+            "path": "security/security.json"
+          }
+        ]
+      },
+      {
+        "name": "neda-data",
+        "type": "persistentVolumeClaim",
+        "source": "neda-pvc",
+        "target": "/var/lib/neda",
+        "readOnly": false,
+        "storageClass": "fast-ssd",
+        "size": "100Gi",
+        "accessModes": [
+          "ReadWriteOnce"
+        ]
+      },
+      {
+        "name": "neda-logs",
+        "type": "hostPath",
+        "source": "/var/log/neda",
+        "target": "/var/log/neda",
+        "readOnly": false,
+        "hostPathType": "DirectoryOrCreate"
+      },
+      {
+        "name": "neda-tmp",
+        "type": "emptyDir",
+        "target": "/tmp",
+        "sizeLimit": "10Gi",
+        "medium": "Memory"
+      },
+      {
+        "name": "neda-secrets",
+        "type": "secret",
+        "source": "neda-secret-store",
+        "target": "/run/secrets/neda",
+        "readOnly": true
+      }
+    ],
+    "mounts": [
+      {
+        "source": "neda-config",
+        "target": "/etc/neda",
+        "type": "bind",
+        "options": [
+          "ro",
+          "rbind"
+        ]
+      },
+      {
+        "source": "neda-data",
+        "target": "/var/lib/neda",
+        "type": "bind",
+        "options": [
+          "rw",
+          "rbind",
+          "noexec",
+          "nosuid"
+        ]
+      },
+      {
+        "source": "/dev/shm",
+        "target": "/dev/shm",
+        "type": "tmpfs",
+        "options": [
+          "rw",
+          "noexec",
+          "nosuid",
+          "size=1g"
+        ]
+      }
+    ],
+    "persistence": {
+      "enabled": true,
+      "backup": {
+        "enabled": true,
+        "schedule": "0 2 * * *",
+        "retention": "30d"
+      },
+      "snapshots": {
+        "enabled": true,
+        "frequency": "hourly",
+        "retention": "7d"
+      }
+    }
+  },
+
+  "environment": {
+    "variables": {
+      "NEDA_ENVIRONMENT": "production",
+      "NEDA_LOG_LEVEL": "INFO",
+      "NEDA_API_KEY": "${NEDA_API_KEY}",
+      "NEDA_DATABASE_URL": "${DATABASE_URL}",
+      "NEDA_REDIS_HOST": "redis.neda.svc.cluster.local",
+      "NEDA_REDIS_PORT": "6379",
+      "NEDA_CACHE_TTL": "3600",
+      "NEDA_SESSION_TIMEOUT": "86400",
+      "NEDA_MAX_WORKERS": "8",
+      "NEDA_THREAD_POOL_SIZE": "16",
+      "NEDA_JVM_OPTS": "-Xmx8g -Xms2g -XX:+UseG1GC -XX:MaxGCPauseMillis=200",
+      "NEDA_PYTHONPATH": "/app:/app/lib",
+      "NEDA_TEMP_DIR": "/tmp/neda",
+      "NEDA_DEBUG": "false"
+    },
+    "secrets": [
+      {
+        "name": "database-password",
+        "key": "DATABASE_PASSWORD",
+        "mountPath": "/run/secrets/db-password",
+        "encoding": "base64"
+      },
+      {
+        "name": "api-secret-key",
+        "key": "API_SECRET_KEY",
+        "mountPath": "/run/secrets/api-key",
+        "encoding": "base64"
+      },
+      {
+        "name": "ssl-certificate",
+        "key": "SSL_CERTIFICATE",
+        "mountPath": "/run/secrets/ssl",
+        "encoding": "pem"
+      }
+    ],
+    "configMaps": [
+      {
+        "name": "neda-app-config",
+        "mountPath": "/etc/neda/config"
+      },
+      {
+        "name": "neda-logging-config",
+        "mountPath": "/etc/neda/logging"
+      }
+    ]
+  },
+
+  "health": {
+    "liveness": {
+      "command": [
+        "/bin/sh",
+        "-c",
+        "curl -f http://localhost:8080/health/live || exit 1"
+      ],
+      "initialDelaySeconds": 30,
+      "periodSeconds": 10,
+      "timeoutSeconds": 5,
+      "successThreshold": 1,
+      "failureThreshold": 3
+    },
+    "readiness": {
+      "command": [
+        "/bin/sh",
+        "-c",
+        "curl -f http://localhost:8080/health/ready || exit 1"
+      ],
+      "initialDelaySeconds": 5,
+      "periodSeconds": 5,
+      "timeoutSeconds": 3,
+      "successThreshold": 1,
+      "failureThreshold": 3
+    },
+    "startup": {
+      "command": [
+        "/bin/sh",
+        "-c",
+        "curl -f http://localhost:8080/health/startup || exit 1"
+      ],
+      "initialDelaySeconds": 0,
+      "periodSeconds": 5,
+      "timeoutSeconds": 30,
+      "successThreshold": 1,
+      "failureThreshold": 30
+    }
+  },
+
+  "monitoring": {
+    "enabled": true,
+    "metrics": {
+      "path": "/metrics",
+      "port": 9090,
+      "scrapeInterval": "15s",
+      "scrapeTimeout": "10s"
+    },
+    "logs": {
+      "driver": "json-file",
+      "options": {
+        "max-size": "100m",
+        "max-file": "10",
+        "compress": "true"
+      },
+      "forwarding": {
+        "enabled": true,
+        "target": "loki.neda.svc.cluster.local:3100"
+      }
+    },
+    "tracing": {
+      "enabled": true,
+      "provider": "jaeger",
+      "endpoint": "jaeger.neda.svc.cluster.local:6831",
+      "samplingRate": 0.1
+    },
+    "alerting": {
+      "enabled": true,
+      "rules": [
+        {
+          "alert": "HighCPUUsage",
+          "expr": "rate(container_cpu_usage_seconds_total[5m]) > 0.8",
+          "for": "5m",
+          "labels": {
+            "severity": "warning"
+          },
+          "annotations": {
+            "summary": "High CPU usage on {{ $labels.container }}",
+            "description": "CPU usage is above 80% for 5 minutes"
+          }
+        }
+      ]
+    }
+  },
+
+  "lifecycle": {
+    "postStart": {
+      "exec": {
+        "command": [
+          "/bin/sh",
+          "-c",
+          "echo 'Container started at $(date)' >> /var/log/neda/startup.log"
+        ]
+      }
+    },
+    "preStop": {
+      "exec": {
+        "command": [
+          "/bin/sh",
+          "-c",
+          "echo 'Container stopping at $(date)' >> /var/log/neda/shutdown.log && sleep 10"
+        ]
+      },
+      "gracePeriodSeconds": 30
+    },
+    "termination": {
+      "gracePeriod": 30,
+      "messagePath": "/dev/termination-log",
+      "messagePolicy": "File"
+    }
+  },
+
+  "scaling": {
+    "horizontal": {
+      "enabled": true,
+      "minReplicas": 2,
+      "maxReplicas": 10,
+      "targetCPUUtilizationPercentage": 70,
+      "targetMemoryUtilizationPercentage": 80,
+      "behavior": {
+        "scaleUp": {
+          "stabilizationWindowSeconds": 0,
+          "selectPolicy": "Max",
+          "policies": [
+            {
+              "type": "Pods",
+              "value": 4,
+              "periodSeconds": 15
+            },
+            {
+              "type": "Percent",
+              "value": 100,
+              "periodSeconds": 15
+            }
+          ]
+        },
+        "scaleDown": {
+          "stabilizationWindowSeconds": 300,
+          "selectPolicy": "Min",
+          "policies": [
+            {
+              "type": "Pods",
+              "value": 4,
+              "periodSeconds": 60
+            },
+            {
+              "type": "Percent",
+              "value": 10,
+              "periodSeconds": 60
+            }
+          ]
+        }
+      }
+    },
+    "vertical": {
+      "enabled": true,
+      "updateMode": "Auto",
+      "minAllowed": {
+        "cpu": "100m",
+        "memory": "256Mi"
+      },
+      "maxAllowed": {
+        "cpu": "8",
+        "memory": "32Gi"
+      }
+    }
+  },
+
+  "deployment": {
+    "strategy": {
+      "type": "RollingUpdate",
+      "rollingUpdate": {
+        "maxUnavailable": "25%",
+        "maxSurge": "25%"
+      }
+    },
+    "revisionHistoryLimit": 10,
+    "progressDeadlineSeconds": 600,
+    "minReadySeconds": 30,
+    "rollback": {
+      "enabled": true,
+      "maxRevisionHistory": 5
+    },
+    "canary": {
+      "enabled": true,
+      "steps": [
+        {
+          "setWeight": 10
+        },
+        {
+          "pause": {
+            "duration": "5m"
+          }
+        },
+        {
+          "setWeight": 50
+        },
+        {
+          "pause": {
+            "duration": "10m"
+          }
+        },
+        {
+          "setWeight": 100
+        }
+      ]
+    }
+  },
+
+  "scheduling": {
+    "nodeSelector": {
+      "node-type": "ai-accelerated",
+      "gpu-type": "nvidia"
+    },
+    "affinity": {
+      "nodeAffinity": {
+        "requiredDuringSchedulingIgnoredDuringExecution": {
+          "nodeSelectorTerms": [
+            {
+              "matchExpressions": [
+                {
+                  "key": "kubernetes.io/arch",
+                  "operator": "In",
+                  "values": [
+                    "amd64"
+                  ]
+                },
+                {
+                  "key": "kubernetes.io/os",
+                  "operator": "In",
+                  "values": [
+                    "linux"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "preferredDuringSchedulingIgnoredDuringExecution": [
+          {
+            "weight": 1,
+            "preference": {
+              "matchExpressions": [
+                {
+                  "key": "topology.kubernetes.io/zone",
+                  "operator": "In",
+                  "values": [
+                    "us-west-2a"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "podAntiAffinity": {
+        "requiredDuringSchedulingIgnoredDuringExecution": [
+          {
+            "labelSelector": {
+              "matchExpressions": [
+                {
+                  "key": "app",
+                  "operator": "In",
+                  "values": [
+                    "neda"
+                  ]
+                }
+              ]
+            },
+            "topologyKey": "kubernetes.io/hostname"
+          }
+        ]
+      }
+    },
+    "tolerations": [
+      {
+        "key": "gpu",
+        "operator": "Exists",
+        "effect": "NoSchedule"
+      },
+      {
+        "key": "dedicated",
+        "operator": "Equal",
+        "value": "ai-nodes",
+        "effect": "NoSchedule"
+      }
+    ],
+    "topologySpreadConstraints": [
+      {
+        "maxSkew": 1,
+        "topologyKey": "topology.kubernetes.io/zone",
+        "whenUnsatisfiable": "ScheduleAnyway",
+        "labelSelector": {
+          "matchLabels": {
+            "app": "neda"
+          }
+        }
+      }
+    ],
+    "priorityClassName": "high-priority",
+    "priority": 1000
+  },
+
+  "updates": {
+    "strategy": "RollingUpdate",
+    "maxUnavailable": 1,
+    "maxSurge": 1,
+    "minReadySeconds": 30,
+    "revisionHistoryLimit": 10,
+    "progressDeadlineSeconds": 600,
+    "rollbackTo": {
+      "revision": 0
+    }
+  },
+
+  "backup": {
+    "enabled": true,
+    "schedule": "0 2 * * *",
+    "retention": {
+      "daily": 7,
+      "weekly": 4,
+      "monthly": 12,
+      "yearly": 3
+    },
+    "storage": {
+      "type": "s3",
+      "bucket": "neda-backups",
+      "region": "us-west-2",
+      "encryption": "AES256"
+    },
+    "include": [
+      "/var/lib/neda/data",
+      "/etc/neda/config"
+    ],
+    "exclude": [
+      "/tmp",
+      "/var/log/neda/*.log"
+    ]
+  },
+
+  "compliance": {
+    "standards": [
+      {
+        "name": "HIPAA",
+        "enabled": true,
+        "requirements": [
+          "encryption-at-rest",
+          "encryption-in-transit",
+          "access-logs",
+          "audit-trails"
+        ]
+      },
+      {
+        "name": "GDPR",
+        "enabled": true,
+        "requirements": [
+          "data-anonymization",
+          "right-to-erasure",
+          "data-portability"
+        ]
+      },
+      {
+        "name": "SOC2",
+        "enabled": true,
+        "requirements": [
+          "security-monitoring",
+          "change-management",
+          "incident-response"
+        ]
+      }
+    ],
+    "audit": {
+      "enabled": true,
+      "retention": "7y",
+      "encryption": true
+    }
+  },
+
+  "extensions": {
+    "plugins": [
+      {
+        "name": "nvidia-gpu",
+        "version": "1.0.0",
+        "enabled": true,
+        "config": {
+          "driver": "nvidia",
+          "capabilities": [
+            "compute",
+            "utility",
+            "video"
+          ]
+        }
+      },
+      {
+        "name": "prometheus-exporter",
+        "version": "0.9.0",
+        "enabled": true,
+        "config": {
+          "port": 9090,
+          "path": "/metrics"
+        }
+      }
+    ],
+    "sidecars": [
+      {
+        "name": "log-collector",
+        "image": "fluentd:latest",
+        "command": [
+          "fluentd",
+          "-c",
+          "/etc/fluentd/fluent.conf"
+        ],
+        "resources": {
+          "limits": {
+            "cpu": "100m",
+            "memory": "128Mi"
+          }
+        }
+      },
+      {
+        "name": "security-scanner",
+        "image": "aquasec/scanner:latest",
+        "command": [
+          "scan",
+          "--interval",
+          "300"
+        ],
+        "resources": {
+          "limits": {
+            "cpu": "200m",
+            "memory": "256Mi"
+          }
+        }
+      }
+    ]
+  },
+
+  "validation": {
+    "schema": "https://schema.neda.io/container-config/v2.1.0",
+    "rules": [
+      {
+        "field": "security.privileged",
+        "required": false,
+        "default": false,
+        "validator": "boolean"
+      },
+      {
+        "field": "resources.memory.limit",
+        "required": true,
+        "validator": "memoryString"
+      },
+      {
+        "field": "networking.ports",
+        "required": true,
+        "validator": "portArray"
+      }
+    ]
+  },
+
+  "overrides": {
+    "development": {
+      "resources": {
+        "memory": {
+          "limit": "8Gi",
+          "request": "2Gi"
+        },
+        "cpu": {
+          "limit": "2000m",
+          "request": "500m"
+        }
+      },
+      "security": {
+        "readOnlyRootFilesystem": false
+      }
+    },
+    "staging": {
+      "replicas": 3,
+      "resources": {
+        "memory": {
+          "limit": "12Gi"
+        }
+      }
+    },
+    "production": {
+      "replicas": 5,
+      "security": {
+        "level": "maximum"
+      }
+    }
+  }
+}

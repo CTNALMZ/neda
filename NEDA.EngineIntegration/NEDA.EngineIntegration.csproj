@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- ================= TEMEL ================= -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>NEDA.EngineIntegration</AssemblyName>
+    <RootNamespace>NEDA.EngineIntegration</RootNamespace>
+    <OutputType>Library</OutputType>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <!-- Native entegrasyon yÃƒÂ¼zÃƒÂ¼nden -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <!-- ================= CORE BAÃ„ÂIMLILIÃ„ÂI ================= -->
+  <ItemGroup>
+    <ProjectReference Include="..\NEDA.Core\NEDA.Core.csproj" />
+  </ItemGroup>
+  <!-- ================= ENGINE / GRAPHICS ================= -->
+  <ItemGroup>
+    <PackageReference Include="Veldrid" Version="4.9.0" />
+    <PackageReference Include="SharpDX" Version="4.2.0" />
+    <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="FluentValidation" Version="11.9.2" />
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NodaTime" Version="3.1.9" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+  </ItemGroup>
+  <!-- ================= DI & LOGGING ================= -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+  <!-- ================= NATIVE DLL REFERANSLARI ================= -->
+  <ItemGroup>
+    <!-- Unreal Engine Bridge -->
+    <Reference Include="UnrealEngine.NET">
+      <HintPath>Libs\UnrealEngine.NET.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <!-- Unity Bridge -->
+    <Reference Include="UnityEngine">
+      <HintPath>Libs\UnityEngine.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,758 @@
+<UserControl x:Class="NEDA.Interface.VisualInterface.MainDashboard.ControlPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NEDA.Interface.VisualInterface.MainDashboard"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:NEDA.UI.Converters"
+             xmlns:components="clr-namespace:NEDA.UI.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200"
+             Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+        <!-- Converters -->
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:InverseBooleanConverter x:Key="InverseBool" />
+        <converters:StatusToColorConverter x:Key="StatusToColor" />
+        <converters:PercentageToWidthConverter x:Key="PercentageToWidth" />
+
+        <!-- Styles -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource MaterialDesignCardBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="2" Opacity="0.1" BlurRadius="8" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="MetricValueStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="MetricLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBodyLight}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,4,0,0" />
+        </Style>
+
+        <Style x:Key="QuickActionButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="120" />
+            <Setter Property="Height" Value="100" />
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="Background" Value="{DynamicResource MaterialDesignCardBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Viewbox Grid.Row="0" Width="32" Height="32" Margin="0,8,0,4">
+                                    <ContentPresenter Content="{TemplateBinding Tag}" />
+                                </Viewbox>
+
+                                <TextBlock Grid.Row="1" 
+                                           Text="{TemplateBinding Content}"
+                                           TextWrapping="Wrap"
+                                           TextAlignment="Center"
+                                           FontSize="11"
+                                           Foreground="{DynamicResource MaterialDesignBody}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Margin="4" />
+
+                                <Border Grid.Row="2" 
+                                        Height="3" 
+                                        Background="{DynamicResource PrimaryHueMidBrush}"
+                                        HorizontalAlignment="Stretch"
+                                        Margin="8,0,8,4"
+                                        CornerRadius="1.5"
+                                        x:Name="ActiveIndicator"
+                                        Visibility="Collapsed" />
+
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetName="ActiveIndicator"
+                                                                Storyboard.TargetProperty="Background.Color"
+                                                                To="{DynamicResource PrimaryHueLightBrush}"
+                                                                Duration="0:0:0.2" />
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ActiveIndicator"
+                                                                               Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetName="ActiveIndicator"
+                                                                Storyboard.TargetProperty="Background.Color"
+                                                                To="{DynamicResource PrimaryHueDarkBrush}"
+                                                                Duration="0:0:0.1" />
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ActiveIndicator"
+                                                                               Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StatusIndicatorStyle" TargetType="Border">
+            <Setter Property="Width" Value="12" />
+            <Setter Property="Height" Value="12" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header Section -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource PrimaryHueMidBrush}" 
+                Padding="16,12"
+                Effect="{DynamicResource MaterialDesignShadowDepth2}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Robot" 
+                                              Width="32" 
+                                              Height="32" 
+                                              Foreground="White" 
+                                              Margin="0,0,12,0" />
+                    <TextBlock Text="NEDA Control Panel" 
+                               FontSize="24" 
+                               FontWeight="SemiBold" 
+                               Foreground="White" 
+                               VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="12">
+                    <!-- Connection Status -->
+                    <Border CornerRadius="12" 
+                            Background="{Binding SystemStatus.ConnectionStatus, Converter={StaticResource StatusToColor}, ConverterParameter=Background}"
+                            Padding="8,4"
+                            VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="LanConnect" 
+                                                      Width="16" 
+                                                      Height="16" 
+                                                      Foreground="{Binding SystemStatus.ConnectionStatus, Converter={StaticResource StatusToColor}}" />
+                            <TextBlock Text="{Binding SystemStatus.ConnectionStatus}" 
+                                       Margin="6,0,0,0" 
+                                       FontSize="12"
+                                       Foreground="{Binding SystemStatus.ConnectionStatus, Converter={StaticResource StatusToColor}}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- AI Status -->
+                    <Border CornerRadius="12" 
+                            Background="{Binding SystemStatus.AIStatus, Converter={StaticResource StatusToColor}, ConverterParameter=Background}"
+                            Padding="8,4"
+                            VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Brain" 
+                                                      Width="16" 
+                                                      Height="16" 
+                                                      Foreground="{Binding SystemStatus.AIStatus, Converter={StaticResource StatusToColor}}" />
+                            <TextBlock Text="{Binding SystemStatus.AIStatus}" 
+                                       Margin="6,0,0,0" 
+                                       FontSize="12"
+                                       Foreground="{Binding SystemStatus.AIStatus, Converter={StaticResource StatusToColor}}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- User Profile -->
+                    <Button Style="{StaticResource MaterialDesignToolButton}" 
+                            Command="{Binding ShowUserProfileCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountCircle" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="White" />
+                            <TextBlock Text="{Binding CurrentUser.DisplayName}" 
+                                       Margin="8,0,0,0" 
+                                       FontSize="14"
+                                       Foreground="White"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Column: System Overview & Quick Actions -->
+            <Grid Grid.Column="0" Margin="0,0,8,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- System Metrics Cards -->
+                <ScrollViewer Grid.Row="0" 
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto"
+                              Margin="0,0,0,16">
+                    <ItemsControl ItemsSource="{Binding SystemMetrics}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource CardStyle}" Width="180" Height="100">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="{Binding Icon}" 
+                                                                      Width="20" 
+                                                                      Height="20" 
+                                                                      Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                                                      Margin="0,0,8,0" />
+                                            <TextBlock Text="{Binding Name}" 
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource MaterialDesignBody}" />
+                                        </StackPanel>
+
+                                        <TextBlock Grid.Row="1" 
+                                                   Text="{Binding Value}" 
+                                                   Style="{StaticResource MetricValueStyle}"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+
+                                        <TextBlock Grid.Row="2" 
+                                                   Text="{Binding Unit}" 
+                                                   Style="{StaticResource MetricLabelStyle}"
+                                                   HorizontalAlignment="Center" />
+
+                                        <!-- Progress Bar for Usage Metrics -->
+                                        <Border Grid.Row="2" 
+                                                Grid.RowSpan="3"
+                                                Height="4"
+                                                Background="{DynamicResource MaterialDesignDivider}"
+                                                CornerRadius="2"
+                                                VerticalAlignment="Bottom"
+                                                Margin="8,0,8,8">
+                                            <Border Width="{Binding Percentage, Converter={StaticResource PercentageToWidth}, ConverterParameter=180}"
+                                                    Background="{Binding Status, Converter={StaticResource StatusToColor}}"
+                                                    CornerRadius="2"
+                                                    HorizontalAlignment="Left" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Quick Actions -->
+                <Border Grid.Row="1" Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="RocketLaunch" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                                      Margin="0,0,8,0" />
+                            <TextBlock Text="Quick Actions" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource MaterialDesignBody}" />
+                        </StackPanel>
+
+                        <WrapPanel Grid.Row="1" Margin="0,16,0,0" Orientation="Horizontal">
+                            <!-- Macro Recording -->
+                            <Button Style="{StaticResource QuickActionButtonStyle}"
+                                    Command="{Binding StartRecordingCommand}"
+                                    IsEnabled="{Binding IsRecording, Converter={StaticResource InverseBool}}">
+                                <Button.Tag>
+                                    <materialDesign:PackIcon Kind="RecordCircle" 
+                                                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                </Button.Tag>
+                                Start Recording
+                            </Button>
+
+                            <Button Style="{StaticResource QuickActionButtonStyle}"
+                                    Command="{Binding StopRecordingCommand}"
+                                    IsEnabled="{Binding IsRecording}">
+                                <Button.Tag>
+                                    <materialDesign:PackIcon Kind="StopCircle" 
+                                                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                </Button.Tag>
+                                Stop Recording
+                            </Button>
+
+                            <!-- AI Controls -->
+                            <Button Style="{StaticResource QuickActionButtonStyle}"
+                                    Command="{Binding ToggleAICommand}">
+                                <Button.Tag>
+                                    <materialDesign:PackIcon Kind="{Binding AIStatusIcon}" 
+                                                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                </Button.Tag>
+                                <TextBlock>
+                                    <Run Text="{Binding AIStatusAction}" />
+                                    <LineBreak />
+                                    <Run Text="AI" />
+                                </TextBlock>
+                            </Button>
+
+                            <!-- System Controls -->
+                            <Button Style="{StaticResource QuickActionButtonStyle}"
+                                    Command="{Binding OptimizeSystemCommand}">
+                                <Button.Tag>
+                                    <materialDesign:PackIcon Kind="CogRefresh" 
+                                                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                </Button.Tag>
+                                Optimize System
+                            </Button>
+
+                            <Button Style="{StaticResource QuickActionButtonStyle}"
+                                    Command="{Binding RunDiagnosticsCommand}">
+                                <Button.Tag>
+                                    <materialDesign:PackIcon Kind="ClipboardPulse" 
+                                                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                </Button.Tag>
+                                Run Diagnostics
+                            </Button>
+
+                            <!-- Security Controls -->
+                            <Button Style="{StaticResource QuickActionButtonStyle}"
+                                    Command="{Binding LockSystemCommand}">
+                                <Button.Tag>
+                                    <materialDesign:PackIcon Kind="Lock" 
+                                                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                </Button.Tag>
+                                Lock System
+                            </Button>
+
+                            <Button Style="{StaticResource QuickActionButtonStyle}"
+                                    Command="{Binding ScanSystemCommand}">
+                                <Button.Tag>
+                                    <materialDesign:PackIcon Kind="ShieldScan" 
+                                                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                </Button.Tag>
+                                Security Scan
+                            </Button>
+
+                            <!-- Backup Controls -->
+                            <Button Style="{StaticResource QuickActionButtonStyle}"
+                                    Command="{Binding CreateBackupCommand}">
+                                <Button.Tag>
+                                    <materialDesign:PackIcon Kind="BackupRestore" 
+                                                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                </Button.Tag>
+                                Create Backup
+                            </Button>
+                        </WrapPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Recording Status -->
+                <Border Grid.Row="2" 
+                        Style="{StaticResource CardStyle}"
+                        Margin="0,16,0,0"
+                        Visibility="{Binding IsRecording, Converter={StaticResource BoolToVisibility}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:PackIcon Grid.Column="0" 
+                                                  Kind="RecordCircle" 
+                                                  Width="24" 
+                                                  Height="24" 
+                                                  Foreground="Red" 
+                                                  Margin="0,0,12,0" />
+
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Recording Macro" 
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource MaterialDesignBody}" />
+                            <TextBlock Text="{Binding CurrentRecording.Name}" 
+                                       FontSize="14"
+                                       Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                       Margin="0,4,0,0" />
+                            <TextBlock>
+                                <Run Text="Duration: " />
+                                <Run Text="{Binding RecordingDuration}" />
+                                <Run Text=" | " />
+                                <Run Text="Steps: " />
+                                <Run Text="{Binding RecordingStepsCount}" />
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                            <Button Style="{StaticResource MaterialDesignToolButton}"
+                                    Command="{Binding PauseRecordingCommand}">
+                                <materialDesign:PackIcon Kind="Pause" />
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignToolButton}"
+                                    Command="{Binding StopRecordingCommand}"
+                                    Margin="8,0,0,0">
+                                <materialDesign:PackIcon Kind="Stop" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Right Column: Activity & Controls -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Recent Activity -->
+                <Border Grid.Row="0" Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="History" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                                      Margin="0,0,8,0" />
+                            <TextBlock Text="Recent Activity" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource MaterialDesignBody}" />
+                            <Button Style="{StaticResource MaterialDesignToolButton}"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding RefreshActivityCommand}">
+                                <materialDesign:PackIcon Kind="Refresh" />
+                            </Button>
+                        </StackPanel>
+
+                        <ListView Grid.Row="1" 
+                                  ItemsSource="{Binding RecentActivities}"
+                                  Margin="0,12,0,0"
+                                  BorderThickness="0"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="8,6" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource MaterialDesignDivider}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <materialDesign:PackIcon Grid.Column="0" 
+                                                                      Kind="{Binding Icon}" 
+                                                                      Width="16" 
+                                                                      Height="16" 
+                                                                      Foreground="{Binding StatusColor}"
+                                                                      Margin="0,0,12,0" />
+
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="{Binding Title}" 
+                                                           TextWrapping="Wrap"
+                                                           FontSize="13" />
+                                                <TextBlock Text="{Binding Description}" 
+                                                           TextWrapping="Wrap"
+                                                           FontSize="11"
+                                                           Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                                           Margin="0,2,0,0" />
+                                            </StackPanel>
+
+                                            <TextBlock Grid.Column="2" 
+                                                       Text="{Binding Time}"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                                       VerticalAlignment="Top" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </Border>
+
+                <!-- Macro Quick Launch -->
+                <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="0,16,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PlayCircle" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                                      Margin="0,0,8,0" />
+                            <TextBlock Text="Quick Macros" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource MaterialDesignBody}" />
+                            <Button Style="{StaticResource MaterialDesignToolButton}"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding ManageMacrosCommand}">
+                                <materialDesign:PackIcon Kind="DotsHorizontal" />
+                            </Button>
+                        </StackPanel>
+
+                        <ItemsControl Grid.Row="1" 
+                                      ItemsSource="{Binding QuickMacros}"
+                                      Margin="0,12,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                            Margin="0,0,0,8"
+                                            Command="{Binding DataContext.ExecuteMacroCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="{Binding Icon}" 
+                                                                      Width="16" 
+                                                                      Height="16" 
+                                                                      Margin="0,0,8,0" />
+                                            <TextBlock Text="{Binding Name}" 
+                                                       VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding ExecutionCount}" 
+                                                       Margin="8,0,0,0"
+                                                       Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                                       FontSize="11"
+                                                       VerticalAlignment="Center">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ExecutionCount}" Value="0">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding ExecutionCount}" Value="{x:Static sys:Int32.MaxValue}">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,16,0,0">
+                            <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding CreateMacroCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Plus" 
+                                                              Width="16" 
+                                                              Height="16" 
+                                                              Margin="0,0,4,0" />
+                                    <TextBlock Text="New Macro" />
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Margin="8,0,0,0"
+                                    Command="{Binding ImportMacroCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Import" 
+                                                              Width="16" 
+                                                              Height="16" 
+                                                              Margin="0,0,4,0" />
+                                    <TextBlock Text="Import" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- System Controls -->
+                <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="0,16,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CogBox" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                                      Margin="0,0,8,0" />
+                            <TextBlock Text="System Controls" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource MaterialDesignBody}" />
+                        </StackPanel>
+
+                        <WrapPanel Grid.Row="1" Margin="0,12,0,0" Orientation="Horizontal">
+                            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          IsChecked="{Binding AutoStartupEnabled}"
+                                          Command="{Binding ToggleAutoStartupCommand}"
+                                          Margin="0,0,16,8">
+                                Auto Startup
+                            </ToggleButton>
+
+                            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          IsChecked="{Binding AutoUpdateEnabled}"
+                                          Command="{Binding ToggleAutoUpdateCommand}"
+                                          Margin="0,0,16,8">
+                                Auto Update
+                            </ToggleButton>
+
+                            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          IsChecked="{Binding AnalyticsEnabled}"
+                                          Command="{Binding ToggleAnalyticsCommand}"
+                                          Margin="0,0,16,8">
+                                Analytics
+                            </ToggleButton>
+
+                            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          IsChecked="{Binding NotificationsEnabled}"
+                                          Command="{Binding ToggleNotificationsCommand}"
+                                          Margin="0,0,16,8">
+                                Notifications
+                            </ToggleButton>
+                        </WrapPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- Footer Status Bar -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource MaterialDesignBackground}"
+                BorderBrush="{DynamicResource MaterialDesignDivider}"
+                BorderThickness="0,1,0,0"
+                Padding="16,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StatusBar Grid.Column="0">
+                    <StatusBarItem>
+                        <StackPanel Orientation="Horizontal">
+                            <Border Style="{StaticResource StatusIndicatorStyle}" 
+                                    Background="{Binding SystemHealth, Converter={StaticResource StatusToColor}}" />
+                            <TextBlock Text="{Binding SystemHealthMessage}" 
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </StatusBarItem>
+
+                    <Separator Style="{StaticResource MaterialDesignVerticalSeparator}" Margin="16,0" />
+
+                    <StatusBarItem>
+                        <TextBlock>
+                            <Run Text="Last Update: " />
+                            <Run Text="{Binding LastUpdateTime}" />
+                        </TextBlock>
+                    </StatusBarItem>
+
+                    <Separator Style="{StaticResource MaterialDesignVerticalSeparator}" Margin="16,0" />
+
+                    <StatusBarItem>
+                        <TextBlock>
+                            <Run Text="Uptime: " />
+                            <Run Text="{Binding SystemUptime}" />
+                        </TextBlock>
+                    </StatusBarItem>
+                </StatusBar>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Style="{StaticResource MaterialDesignToolButton}"
+                            Command="{Binding ShowSettingsCommand}"
+                            ToolTip="Settings">
+                        <materialDesign:PackIcon Kind="Cog" />
+                    </Button>
+
+                    <Button Style="{StaticResource MaterialDesignToolButton}"
+                            Command="{Binding ShowLogsCommand}"
+                            ToolTip="View Logs"
+                            Margin="8,0,0,0">
+                        <materialDesign:PackIcon Kind="TextBox" />
+                    </Button>
+
+                    <Button Style="{StaticResource MaterialDesignToolButton}"
+                            Command="{Binding ShowHelpCommand}"
+                            ToolTip="Help"
+                            Margin="8,0,0,0">
+                        <materialDesign:PackIcon Kind="HelpCircle" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
